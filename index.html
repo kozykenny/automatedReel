@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViralReel Automator - AI Instagram自動化ツール</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #F97316, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-shadow {
+            box-shadow: 0 0 40px 0 rgba(236, 72, 153, 0.4);
+        }
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Header -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tight gradient-text">ViralReel Automator</h1>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#how-it-works" class="hover:text-pink-400 transition-colors">仕組み</a>
+                <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
+                <a href="#features" class="hover:text-pink-400 transition-colors">機能詳細</a>
+                <a href="#disclaimer" class="hover:text-pink-400 transition-colors">免責事項</a>
+            </nav>
+            <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">今すぐ始める</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="container mx-auto px-6 py-24 text-center">
+        <h2 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">
+            Instagramの運用、<br class="hidden md:block" />
+            <span class="gradient-text">AIに丸投げしませんか？</span>
+        </h2>
+        <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+            他人のバズったリール動画を「合法的に」再利用。AIがキャプション作成から動画編集、投稿までを全自動化。あなたのInstagramアカウントを、寝ている間も成長させます。
+        </p>
+        <div class="mt-10">
+            <a href="#pricing" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105 glow-shadow">
+                料金プランを見る
+            </a>
+        </div>
+    </main>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">たった3ステップで運用を自動化</h3>
+                <p class="text-gray-400 mt-2">面倒な作業はすべてツールにお任せください。</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10 text-center">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-5xl mb-4">🔍</div>
+                    <h4 class="text-2xl font-semibold text-white">1. コンテンツ収集 (Scrape)</h4>
+                    <p class="text-gray-400 mt-2">指定したアカウントから、再生数や「いいね」が多い人気リール動画のデータを自動で収集します。</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-5xl mb-4">✨</div>
+                    <h4 class="text-2xl font-semibold text-white">2. AIで再創造 (Enhance)</h4>
+                    <p class="text-gray-400 mt-2">AIがエンゲージメントを最大化するキャプションを生成。動画にウォーターマークやテキストを自動で追加・編集します。</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-5xl mb-4">🚀</div>
+                    <h4 class="text-2xl font-semibold text-white">3. 完全自動投稿 (Automate)</h4>
+                    <p class="text-gray-400 mt-2">編集済みの動画と新しいキャプションを、設定したスケジュールであなたのInstagramアカウントに自動投稿します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">あなたに合ったプランを選びましょう</h3>
+                <p class="text-gray-400 mt-2">ビジネスの規模に合わせて3つのプランをご用意しました。</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-orange-400">Starter</h4>
+                        <p class="mt-4 text-gray-300">まずは始めたい個人・小規模アカウント向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            ¥9,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
+                        </div>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>1 Instagramアカウント連携</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月100投稿まで</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月500コンテンツ収集</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">Starterプランで始める</a>
+                </div>
+
+                <!-- Pro Plan (Most Popular) -->
+                <div class="bg-gray-800 p-8 rounded-2xl border-2 border-pink-500 flex flex-col hover-lift relative transform lg:scale-105">
+                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
+                        <span class="bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">一番人気</span>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-pink-400">Pro</h4>
+                        <p class="mt-4 text-gray-300">本格的に収益化を目指すアフィリエイター向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            ¥19,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
+                        </div>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>3</strong> Instagramアカウント連携</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月300投稿まで</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月1,500コンテンツ収集</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
+                        </ul>
+                    </div>
+                    <a href="#" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">Proプランで始める</a>
+                </div>
+
+                <!-- Agency Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-teal-400">Agency</h4>
+                        <p class="mt-4 text-gray-300">複数のクライアントを管理する代理店・法人向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            要問い合わせ
+                        </div>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>10+</strong> アカウント連携</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>投稿数・収集数 無制限</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>専任担当者によるサポート</strong></li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>カスタムオンボーディング</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:support@viralreel.example.com" class="mt-8 block w-full bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">お問い合わせ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">競合を圧倒する機能</h3>
+                <p class="text-gray-400 mt-2">ただの自動投稿ツールではありません。</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🤖 AIキャプション生成</h4>
+                    <p class="text-gray-400 mt-2">OpenAIのGPT-4.1を活用し、ターゲット層に響く、エンゲージメントの高いキャプションを無限に生成します。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🎬 自動ビデオ編集</h4>
+                    <p class="text-gray-400 mt-2">Creatomate APIと連携し、動画にあなたのアカウントIDや独自のテキストをウォーターマークとして自動で追加します。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">📈 パフォーマンスフィルター</h4>
+                    <p class="text-gray-400 mt-2">「再生数5000回以上」など、特定の基準を満たすバイラル動画のみを対象とし、投稿の成功率を高めます。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🛡️ 重複投稿防止</h4>
+                    <p class="text-gray-400 mt-2">Airtableデータベースと連携し、一度投稿したコンテンツを再度投稿することがないよう、厳密に管理します。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">💬 Telegramで簡単操作</h4>
+                    <p class="text-gray-400 mt-2">全ての操作は使い慣れたTelegramから。ターゲットアカウントの指定や進捗確認もチャットで完結します。</p>
+                </div>
+                 <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🗓️ スケジュール投稿</h4>
+                    <p class="text-gray-400 mt-2">「3時間ごと」など、設定した間隔で自動投稿。アカウントを常にアクティブな状態に保ち、アルゴリズムに好まれます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Disclaimer Section -->
+    <section id="disclaimer" class="py-20">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="bg-yellow-900/30 border-2 border-yellow-500 rounded-2xl p-8 text-center">
+                <h3 class="text-3xl font-bold text-yellow-300">⚠️【重要】免責事項と利用上の注意</h3>
+                <p class="mt-4 text-yellow-200">本ツールをご利用になる前に、必ず以下の内容をご理解・ご同意ください。</p>
+                <div class="mt-6 text-left space-y-3 text-gray-300">
+                   <p><strong>1. 著作権について:</strong> 他人が作成したコンテンツを許可なく再投稿することは、著作権侵害にあたる可能性があります。本ツールは、著作権フリーの素材、自身が権利を所有するコンテンツ、または「Meme（ミーム）」のように慣習的に共有が認められているコンテンツ（ただし、元の映像が映画などの場合は権利侵害の可能性があります）に利用を限定することを推奨します。</p>
+                   <p><strong>2. Instagramの利用規約:</strong> 自動化ツールの使用は、Instagramの利用規約に違反する可能性があります。アカウントの凍結や削除などのリスクが伴うことを十分に理解した上で、自己の責任においてご利用ください。</p>
+                   <p><strong>3. 法的責任:</strong> 本ツールの利用によって生じたいかなる法的問題（著作権侵害による訴訟、アカウントのペナルティ等）についても、当方は一切の責任を負いかねます。ツールの利用は、利用者自身の責任で行うものとします。不明な点がある場合は、弁護士などの専門家にご相談ください。</p>
+                </div>
+                 <p class="mt-6 text-yellow-300 font-semibold">
+                    購入・利用を開始した時点で、上記すべての条項に同意したものとみなします。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 ViralReel Automator. All Rights Reserved.</p>
+            <p class="text-sm mt-2">This tool is not affiliated with Instagram, Facebook, or Meta.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
