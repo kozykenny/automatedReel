@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViralReel Automator - AI Instagram自動化ツール</title>
+    <title>ViralReel Automator - 14日間無料トライアル | AI Instagram自動化ツール</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -25,6 +25,16 @@
             transform: translateY(-8px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+        /* For FAQ Accordion */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary .arrow-down {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
@@ -35,26 +45,27 @@
             <h1 class="text-2xl font-bold tracking-tight gradient-text">ViralReel Automator</h1>
             <nav class="hidden md:flex space-x-8 items-center">
                 <a href="#how-it-works" class="hover:text-pink-400 transition-colors">仕組み</a>
-                <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
                 <a href="#features" class="hover:text-pink-400 transition-colors">機能詳細</a>
-                <a href="#disclaimer" class="hover:text-pink-400 transition-colors">免責事項</a>
+                <a href="#testimonials" class="hover:text-pink-400 transition-colors">お客様の声</a>
+                <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
+                <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
             </nav>
-            <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">今すぐ始める</a>
+            <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">無料トライアルを試す</a>
         </div>
     </header>
 
     <!-- Hero Section -->
     <main class="container mx-auto px-6 py-24 text-center">
         <h2 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">
-            Instagramの運用、<br class="hidden md:block" />
+            Instagramの運用を、<br class="hidden md:block" />
             <span class="gradient-text">AIに丸投げしませんか？</span>
         </h2>
         <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-            他人のバズったリール動画を「合法的に」再利用。AIがキャプション作成から動画編集、投稿までを全自動化。あなたのInstagramアカウントを、寝ている間も成長させます。
+            AIがキャプション作成から動画編集、投稿までを全自動化。まずは14日間の無料トライアルで、あなたのInstagramアカウントが成長するのを体験してください。
         </p>
         <div class="mt-10">
             <a href="#pricing" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105 glow-shadow">
-                料金プランを見る
+                14日間の無料トライアルを試す
             </a>
         </div>
     </main>
@@ -86,74 +97,33 @@
         </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-20">
+    <!-- Who is this for Section -->
+    <section id="who-is-this-for" class="py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">あなたに合ったプランを選びましょう</h3>
-                <p class="text-gray-400 mt-2">ビジネスの規模に合わせて3つのプランをご用意しました。</p>
+                <h3 class="text-4xl font-bold text-white">こんな方におすすめです</h3>
+                <p class="text-gray-400 mt-2">あなたのビジネスを次のレベルへ。</p>
             </div>
-            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Starter Plan -->
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
-                    <div class="flex-grow">
-                        <h4 class="text-2xl font-bold text-orange-400">Starter</h4>
-                        <p class="mt-4 text-gray-300">まずは始めたい個人・小規模アカウント向け</p>
-                        <div class="mt-6 text-4xl font-black text-white">
-                            ¥9,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
-                        </div>
-                        <ul class="mt-8 space-y-4 text-left">
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>1 Instagramアカウント連携</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月100投稿まで</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月500コンテンツ収集</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
-                        </ul>
-                    </div>
-                    <a href="#" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">Starterプランで始める</a>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4">💰</div>
+                    <h4 class="text-2xl font-semibold text-white">アフィリエイトマーケター</h4>
+                    <p class="text-gray-400 mt-2">複数のアカウントを効率的に運用し、収益化までの時間を大幅に短縮したい方。</p>
                 </div>
-
-                <!-- Pro Plan (Most Popular) -->
-                <div class="bg-gray-800 p-8 rounded-2xl border-2 border-pink-500 flex flex-col hover-lift relative transform lg:scale-105">
-                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
-                        <span class="bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">一番人気</span>
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="text-2xl font-bold text-pink-400">Pro</h4>
-                        <p class="mt-4 text-gray-300">本格的に収益化を目指すアフィリエイター向け</p>
-                        <div class="mt-6 text-4xl font-black text-white">
-                            ¥19,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
-                        </div>
-                        <ul class="mt-8 space-y-4 text-left">
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>3</strong> Instagramアカウント連携</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月300投稿まで</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月1,500コンテンツ収集</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
-                        </ul>
-                    </div>
-                    <a href="#" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">Proプランで始める</a>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4">😂</div>
+                    <h4 class="text-2xl font-semibold text-white">ミーム・まとめ系アカウント</h4>
+                    <p class="text-gray-400 mt-2">コンテンツを探し、編集する手間を省き、投稿の頻度と質を劇的に向上させたい方。</p>
                 </div>
-
-                <!-- Agency Plan -->
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
-                    <div class="flex-grow">
-                        <h4 class="text-2xl font-bold text-teal-400">Agency</h4>
-                        <p class="mt-4 text-gray-300">複数のクライアントを管理する代理店・法人向け</p>
-                        <div class="mt-6 text-4xl font-black text-white">
-                            要問い合わせ
-                        </div>
-                        <ul class="mt-8 space-y-4 text-left">
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>10+</strong> アカウント連携</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>投稿数・収集数 無制限</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>専任担当者によるサポート</strong></li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>カスタムオンボーディング</li>
-                        </ul>
-                    </div>
-                    <a href="mailto:support@viralreel.example.com" class="mt-8 block w-full bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">お問い合わせ</a>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4">⚡</div>
+                    <h4 class="text-2xl font-semibold text-white">グロースハッカー</h4>
+                    <p class="text-gray-400 mt-2">最新のAIツールを活用して、最速でアカウントを成長させるための新しい戦略を試したい方。</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Features Section -->
     <section id="features" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6">
@@ -190,6 +160,175 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">お客様の声</h3>
+                <p class="text-gray-400 mt-2">すでに多くの方が結果を出しています。</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
+                    <p class="text-gray-300">「トライアルを試したら、3日で効果を実感。即契約しました。1ヶ月でフォロワーが3万人増え、今まで手作業でやっていたのが馬鹿らしくなりました。」</p>
+                    <div class="mt-6">
+                        <p class="font-bold text-white">K. Tanaka 様</p>
+                        <p class="text-sm text-gray-400">アフィリエイトマーケター</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
+                    <p class="text-gray-300">「毎日3時間かかっていたコンテンツ作成の時間がゼロに。空いた時間で新しいアカウントの戦略を練ることができ、ビジネスが加速しています。」</p>
+                    <div class="mt-6">
+                        <p class="font-bold text-white">M. Suzuki 様</p>
+                        <p class="text-sm text-gray-400">コンテンツクリエイター</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
+                    <p class="text-gray-300">「技術的な知識が全くなくても、Telegramで指示を出すだけで全てが動くのに感動しました。サポートも丁寧で、安心して任せられます。」</p>
+                    <div class="mt-6">
+                        <p class="font-bold text-white">A. Sato 様</p>
+                        <p class="text-sm text-gray-400">オンライン事業者</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">あなたに合ったプランを選びましょう</h3>
+                <p class="text-gray-400 mt-2">全てのプランに14日間の無料トライアルが付いています。いつでもキャンセル可能です。</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-orange-400">Starter</h4>
+                        <p class="mt-4 text-gray-300">まずは始めたい個人・小規模アカウント向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            ¥9,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-400">14日間のトライアル終了後</p>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>1 Instagramアカウント連携</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月100投稿まで</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月500コンテンツ収集</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
+                        </ul>
+                    </div>
+                    <!-- LIVE STRIPE LINK FOR STARTER PLAN -->
+                    <a href="https://buy.stripe.com/eVqcN7dwF7wc4oP1o4" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
+                </div>
+
+                <!-- Pro Plan (Most Popular) -->
+                <div class="bg-gray-800 p-8 rounded-2xl border-2 border-pink-500 flex flex-col hover-lift relative transform lg:scale-105">
+                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
+                        <span class="bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">一番人気</span>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-pink-400">Pro</h4>
+                        <p class="mt-4 text-gray-300">本格的に収益化を目指すアフィリエイター向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            ¥19,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-400">14日間のトライアル終了後</p>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>3</strong> Instagramアカウント連携</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月300投稿まで</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月1,500コンテンツ収集</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
+                        </ul>
+                    </div>
+                    <!-- LIVE STRIPE LINK FOR PRO PLAN -->
+                    <a href="https://buy.stripe.com/3cI4gB1NX5o4g7x8wz" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
+                </div>
+
+                <!-- Agency Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-teal-400">Agency</h4>
+                        <p class="mt-4 text-gray-300">複数のクライアントを管理する代理店・法人向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            要問い合わせ
+                        </div>
+                        <p class="mt-2 text-sm text-gray-400">トライアルについてもご相談ください</p>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>10+</strong> アカウント連携</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>投稿数・収集数 無制限</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>専任担当者によるサポート</strong></li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>カスタムオンボーディング</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:pepezar000@gmail.com" class="mt-8 block w-full bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">お問い合わせ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section id="final-cta" class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <div class="bg-gradient-to-r from-orange-500 to-pink-600 p-12 rounded-2xl shadow-2xl">
+                <h3 class="text-4xl font-extrabold text-white">準備はできましたか？</h3>
+                <p class="mt-4 text-lg text-white/90 max-w-2xl mx-auto">
+                    今日からInstagram運用の自動化を始め、競合に差をつけましょう。まずは14日間、無料でその効果を実感してください。
+                </p>
+                <div class="mt-8">
+                    <a href="#pricing" class="bg-white text-pink-600 font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105">
+                        最適なプランでトライアルを開始
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">よくある質問</h3>
+            </div>
+            <div class="space-y-4">
+                <details class="bg-gray-800 p-6 rounded-lg group">
+                    <summary class="flex justify-between items-center cursor-pointer">
+                        <span class="text-lg font-semibold text-white">無料トライアルはどのように機能しますか？</span>
+                        <span class="arrow-down transition-transform transform text-pink-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-gray-400">
+                        トライアルを開始する際にクレジットカード情報の入力が必要ですが、最初の14日間は一切請求されません。トライアル期間が終了する前にキャンセルすれば、料金は発生しません。キャンセルしない場合、14日後に自動的に選択したプランの月額料金が課金されます。
+                    </p>
+                </details>
+                <details class="bg-gray-800 p-6 rounded-lg group">
+                    <summary class="flex justify-between items-center cursor-pointer">
+                        <span class="text-lg font-semibold text-white">アカウントの安全性は保証されますか？</span>
+                        <span class="arrow-down transition-transform transform text-pink-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-gray-400">
+                        当サービスはMetaの公式APIを利用していますが、自動化ツールの使用はInstagramの利用規約に違反する可能性があります。リスクを最小限に抑えるためのベストプラクティスを遵守して運用しますが、アカウントの安全性は100%保証できるものではありません。詳細は<a href="#disclaimer" class="text-pink-400 underline">免責事項</a>をご確認ください。自己責任でのご利用をお願いいたします。
+                    </p>
+                </details>
+                <details class="bg-gray-800 p-6 rounded-lg group">
+                    <summary class="flex justify-between items-center cursor-pointer">
+                        <span class="text-lg font-semibold text-white">利用開始までに何が必要ですか？</span>
+                        <span class="arrow-down transition-transform transform text-pink-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-gray-400">
+                        お客様にご用意いただくのは、自動化したいInstagramのプロアカウントと、それに連携しているFacebookアカウントのユーザー名のみです。パスワードをお預かりすることは一切ありません。お支払い完了後、担当者がTelegramでご連絡し、安全な認証プロセスをご案内します。
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
 
     <!-- Disclaimer Section -->
     <section id="disclaimer" class="py-20">
@@ -210,15 +349,45 @@
     </section>
 
     <!-- Footer -->
-     <footer class="bg-gray-900 border-t border-gray-700">
+    <footer class="bg-gray-900 border-t border-gray-700">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
-            <!-- この下の行を追加 -->
             <a href="tokushoho.html" class="hover:text-pink-400 transition-colors mb-4 block">特定商取引法に基づく表記</a>
-    
             <p>&copy; 2025 ViralReel Automator. All Rights Reserved.</p>
             <p class="text-sm mt-2">This tool is not affiliated with Instagram, Facebook, or Meta.</p>
         </div>
     </footer>
+
+    <!-- Affiliate Tracking Script - Placed here to run after the page content is loaded -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Step 1: Capture the Affiliate ID from the URL ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const affiliateId = urlParams.get('ref'); // We are looking for a parameter like ?ref=partnername
+
+            // --- Step 2: Store the Affiliate ID in the browser's local storage ---
+            if (affiliateId) {
+                // If an affiliate ID is found in the URL, save it.
+                localStorage.setItem('affiliateRef', affiliateId);
+                console.log('Affiliate ID captured and stored:', affiliateId);
+            }
+
+            // --- Step 3: Add the stored Affiliate ID to all Stripe payment links on the page ---
+            const storedAffiliateId = localStorage.getItem('affiliateRef');
+            
+            if (storedAffiliateId) {
+                // Find all links on the page that go to Stripe
+                const stripeLinks = document.querySelectorAll('a[href*="checkout.stripe.com"], a[href*="buy.stripe.com"]');
+
+                stripeLinks.forEach(link => {
+                    const originalUrl = link.href;
+                    // Add the affiliate ID as a client_reference_id parameter to the Stripe URL.
+                    const newUrl = originalUrl + `?client_reference_id=${storedAffiliateId}`;
+                    link.href = newUrl;
+                    console.log('Updated Stripe link:', newUrl);
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
