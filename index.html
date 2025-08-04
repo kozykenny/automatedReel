@@ -19,7 +19,7 @@
             background: linear-gradient(90deg, #8B5CF6, #EC4899);
             transition: all 0.3s ease;
         }
-        .cta-button:hover {
+        .cta-button:hover:not(:disabled) {
             box-shadow: 0 0 20px 0 rgba(139, 92, 246, 0.5);
             transform: translateY(-2px);
         }
@@ -120,10 +120,38 @@
                  <p class="mt-3 text-xs text-gray-500">Leave blank to post immediately.</p>
             </div>
 
-            <!-- Step 4: Preview & Post -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
+            <!-- Step 4: Connect Account -->
+            <div id="connect-section" class="bg-white p-6 rounded-2xl shadow-md">
                 <div class="flex items-center mb-4">
                     <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">4</div>
+                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Connect Your Account</h2>
+                </div>
+                <p class="text-gray-600 mb-4">To schedule posts, you first need to securely connect your Facebook and Instagram accounts.</p>
+                <a id="fb-login-button" href="https://www.facebook.com/v18.0/dialog/oauth?client_id=967193635301764&redirect_uri=https://tokyogirlshub.app.n8n.cloud/webhook/fcf13cf1-1003-4b55-8ea9-85121c5b4c59&scope=instagram_basic,instagram_content_publish,pages_show_list,pages_manage_posts,publish_video&state=test_user_demo" class="w-full sm:w-auto flex items-center justify-center cta-button text-white font-bold py-3 px-6 rounded-lg text-lg">
+                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                    Connect Facebook Account
+                </a>
+            </div>
+
+            <!-- Connection Success Message -->
+            <div id="connect-success-message" class="hidden bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.06 0l4-5.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-green-800">✅ Connected to Facebook & Instagram successfully!</p>
+                        <p class="mt-1 text-sm text-green-700">Connected as: @creator_jane. You can now proceed to post.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Preview & Post -->
+            <div class="bg-white p-6 rounded-2xl shadow-md">
+                <div class="flex items-center mb-4">
+                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">5</div>
                     <h2 class="ml-4 text-xl font-semibold text-gray-900">Preview & Post</h2>
                 </div>
                 <div class="flex flex-col sm:flex-row items-center gap-6">
@@ -142,7 +170,7 @@
                     <div class="text-left">
                         <p class="text-gray-600">By clicking the button below, you agree to post the content you've provided to the Instagram account connected to **@creator_jane**.</p>
                         <p class="mt-4 text-sm text-gray-500">This action requires your authorization.</p>
-                        <button id="post-button" class="mt-4 w-full sm:w-auto cta-button text-white font-bold py-3 px-8 rounded-lg text-lg">
+                        <button id="post-button" class="mt-4 w-full sm:w-auto cta-button text-white font-bold py-3 px-8 rounded-lg text-lg disabled:bg-gray-400 disabled:shadow-none disabled:cursor-not-allowed" disabled>
                             Post to Instagram
                         </button>
                     </div>
@@ -159,6 +187,10 @@
         const captionBox = document.getElementById('caption-box');
         const previewCaption = document.getElementById('preview-caption');
         const aiCaptionBtn = document.getElementById('ai-caption-btn');
+        const fbLoginButton = document.getElementById('fb-login-button');
+        const connectSection = document.getElementById('connect-section');
+        const connectSuccessMessage = document.getElementById('connect-success-message');
+        const postButton = document.getElementById('post-button');
 
         fileUpload.addEventListener('change', (event) => {
             if (event.target.files.length > 0) {
@@ -179,6 +211,21 @@
                 previewCaption.textContent = sampleCaption;
                 aiCaptionBtn.textContent = '✨ Auto-generate Caption with AI';
             }, 1000);
+        });
+
+        // Simulate Facebook Login Flow for the screencast
+        fbLoginButton.addEventListener('click', (event) => {
+            // Prevent the link from actually navigating for the mockup
+            event.preventDefault(); 
+            
+            // Hide the login section
+            connectSection.classList.add('hidden');
+
+            // Show the success message
+            connectSuccessMessage.classList.remove('hidden');
+
+            // Enable the final "Post to Instagram" button
+            postButton.disabled = false;
         });
     </script>
 
