@@ -30,6 +30,10 @@
         #file-upload-button {
             cursor: pointer;
         }
+        /* Custom alert box styles */
+        #alert-box {
+            transition: opacity 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -177,57 +181,99 @@
                 </div>
             </div>
         </div>
+        
+        <p class="text-xs text-gray-400 text-center mt-6">
+            This is a demo page to illustrate the intended UX flow. OAuth and posting are mocked for review purposes only.
+        </p>
     </main>
 
-    <script>
-        // Simple JS for mockup interactivity
-        const fileUpload = document.getElementById('file-upload');
-        const fileInfo = document.getElementById('file-info');
-        const fileName = document.getElementById('file-name');
-        const captionBox = document.getElementById('caption-box');
-        const previewCaption = document.getElementById('preview-caption');
-        const aiCaptionBtn = document.getElementById('ai-caption-btn');
-        const fbLoginButton = document.getElementById('fb-login-button');
-        const connectSection = document.getElementById('connect-section');
-        const connectSuccessMessage = document.getElementById('connect-success-message');
-        const postButton = document.getElementById('post-button');
+    <!-- Custom Alert Box -->
+    <div id="alert-box" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 opacity-0">
+        <div class="bg-white rounded-lg p-8 shadow-xl text-center max-w-sm mx-auto">
+            <div class="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-green-100">
+                <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900">Success!</h3>
+            <p class="mt-2 text-sm text-gray-500">Your Reel has been scheduled!</p>
+            <button id="alert-close-button" class="mt-6 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg">
+                Close
+            </button>
+        </div>
+    </div>
 
-        fileUpload.addEventListener('change', (event) => {
-            if (event.target.files.length > 0) {
-                fileName.textContent = event.target.files[0].name;
-                fileInfo.classList.remove('hidden');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileUpload = document.getElementById('file-upload');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const captionBox = document.getElementById('caption-box');
+            const previewCaption = document.getElementById('preview-caption');
+            const aiCaptionBtn = document.getElementById('ai-caption-btn');
+            const fbLoginButton = document.getElementById('fb-login-button');
+            const connectSection = document.getElementById('connect-section');
+            const connectSuccessMessage = document.getElementById('connect-success-message');
+            const postButton = document.getElementById('post-button');
+            const alertBox = document.getElementById('alert-box');
+            const alertCloseButton = document.getElementById('alert-close-button');
+
+            if (fileUpload && fileInfo && fileName) {
+                fileUpload.addEventListener('change', (event) => {
+                    if (event.target.files.length > 0) {
+                        fileName.textContent = event.target.files[0].name;
+                        fileInfo.classList.remove('hidden');
+                    }
+                });
+            }
+
+            if (captionBox && previewCaption) {
+                captionBox.addEventListener('input', (event) => {
+                    previewCaption.textContent = event.target.value || 'Your caption will appear here...';
+                });
+            }
+
+            if (aiCaptionBtn && captionBox && previewCaption) {
+                aiCaptionBtn.addEventListener('click', () => {
+                    aiCaptionBtn.textContent = 'Generating...';
+                    setTimeout(() => {
+                        const sampleCaption = "Just finished a great workout! Feeling energized and ready to take on the day. What are your fitness goals? #fitness #workout #motivation";
+                        captionBox.value = sampleCaption;
+                        previewCaption.textContent = sampleCaption;
+                        aiCaptionBtn.textContent = '✨ Auto-generate Caption with AI';
+                    }, 1000);
+                });
+            }
+
+            if (fbLoginButton && connectSection && connectSuccessMessage && postButton) {
+                fbLoginButton.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    connectSection.classList.add('hidden');
+                    connectSuccessMessage.classList.remove('hidden');
+                    postButton.disabled = false;
+                });
+            }
+
+            if (postButton) {
+                postButton.addEventListener('click', () => {
+                    postButton.textContent = "Posting...";
+                    setTimeout(() => {
+                        postButton.textContent = "Posted!";
+                        postButton.disabled = true;
+                        // Show custom alert
+                        alertBox.classList.remove('hidden');
+                        setTimeout(() => alertBox.style.opacity = '1', 10);
+                    }, 1000);
+                });
+            }
+
+            if (alertCloseButton && alertBox) {
+                alertCloseButton.addEventListener('click', () => {
+                    alertBox.style.opacity = '0';
+                    setTimeout(() => alertBox.classList.add('hidden'), 300);
+                });
             }
         });
-        
-        captionBox.addEventListener('input', (event) => {
-            previewCaption.textContent = event.target.value || 'Your caption will appear here...';
-        });
-
-        aiCaptionBtn.addEventListener('click', () => {
-            aiCaptionBtn.textContent = 'Generating...';
-            setTimeout(() => {
-                const sampleCaption = "Just finished a great workout! Feeling energized and ready to take on the day. What are your fitness goals? #fitness #workout #motivation";
-                captionBox.value = sampleCaption;
-                previewCaption.textContent = sampleCaption;
-                aiCaptionBtn.textContent = '✨ Auto-generate Caption with AI';
-            }, 1000);
-        });
-
-        // Simulate Facebook Login Flow for the screencast
-        fbLoginButton.addEventListener('click', (event) => {
-            // Prevent the link from actually navigating for the mockup
-            event.preventDefault(); 
-            
-            // Hide the login section
-            connectSection.classList.add('hidden');
-
-            // Show the success message
-            connectSuccessMessage.classList.remove('hidden');
-
-            // Enable the final "Post to Instagram" button
-            postButton.disabled = false;
-        });
     </script>
-
 </body>
 </html>
