@@ -1,389 +1,447 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViralReel Automator</title>
+    <title>ViralReel Automator - AIコンテンツ戦略プラットフォーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
         }
         .gradient-text {
-            background: linear-gradient(90deg, #8B5CF6, #EC4899);
+            background: linear-gradient(90deg, #F97316, #EC4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .cta-button {
-            background: linear-gradient(90deg, #8B5CF6, #EC4899);
-            transition: all 0.3s ease;
+        .glow-shadow {
+            box-shadow: 0 0 40px 0 rgba(236, 72, 153, 0.4);
         }
-        .cta-button:hover:not(:disabled) {
-            box-shadow: 0 0 20px 0 rgba(139, 92, 246, 0.5);
-            transform: translateY(-2px);
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .step-number {
-            background: linear-gradient(90deg, #8B5CF6, #EC4899);
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        #file-upload-button {
-            cursor: pointer;
+        details > summary {
+            list-style: none;
         }
-        #alert-box {
-            transition: opacity 0.3s ease-in-out;
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary .arrow-down {
+            transform: rotate(180deg);
+        }
+        /* Added style for modal */
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-900 text-gray-200">
 
-    <!-- Top Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0">
-                    <span class="text-2xl font-bold gradient-text">ViralReel Automator</span>
-                </div>
-                <div class="hidden sm:flex sm:items-center sm:space-x-6">
-                    <a href="#" class="text-gray-500 hover:text-gray-900">How it Works</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900">Pricing</a>
-                    <div id="user-profile-nav" class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                            <span id="user-initials-nav" class="text-sm font-semibold text-gray-600"></span>
-                        </div>
-                        <span id="username-nav" class="text-gray-700 font-medium">Not Connected</span>
-                    </div>
-                </div>
+    <!-- Header -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tight gradient-text">ViralReel Automator</h1>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#how-it-works" class="hover:text-pink-400 transition-colors">仕組み</a>
+                <a href="#features" class="hover:text-pink-400 transition-colors">機能詳細</a>
+                <a href="#testimonials" class="hover:text-pink-400 transition-colors">お客様の声</a>
+                <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
+                <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
+            </nav>
+            <!-- MODIFIED: Added Login and Sign Up buttons -->
+            <div class="flex items-center space-x-4">
+                <button id="login-btn" class="text-white hover:text-pink-400 transition-colors">ログイン</button>
+                <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">新規登録</a>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-        <div class="text-center mb-12">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Let's boost your content!</h1>
-            <p class="mt-3 text-lg text-gray-600">Create and schedule your next Reel in just a few steps.</p>
-        </div>
-
-        <!-- Step 1: Connect Account (Visible by default) -->
-        <div id="connect-section" class="bg-white p-6 rounded-2xl shadow-md text-center">
-            <div class="flex items-center mb-4 justify-center">
-                <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">1</div>
-                <h2 class="ml-4 text-xl font-semibold text-gray-900">Connect Your Account</h2>
-            </div>
-            <p class="text-gray-600 mb-4 max-w-md mx-auto">To begin, securely connect your Facebook and Instagram accounts. This allows our app to schedule content and show you performance insights.</p>
-            <button id="fb-login-button" class="w-full sm:w-auto flex items-center justify-center cta-button text-white font-bold py-3 px-6 rounded-lg text-lg mx-auto">
-                <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
-                Connect Facebook Account
-            </button>
-        </div>
-        
-        <!-- Connection Success Message (Hidden by default) -->
-        <div id="connect-success-message" class="hidden bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg mb-10">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.06 0l4-5.5z" clip-rule="evenodd" /></svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">✅ Connection Successful!</p>
-                    <p id="connected-as-message" class="mt-1 text-sm text-green-700">You can now proceed.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Content Creation Steps (Hidden by default) -->
-        <div id="content-creation-steps" class="hidden space-y-10">
-            <!-- Step 2: Select Account -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center mb-4">
-                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">2</div>
-                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Select Instagram Account</h2>
-                </div>
-                <p class="text-sm text-gray-600 mb-2">Choose the account you want to post to.</p>
-                <select id="account-select" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm">
-                    <!-- Options will be populated by JS -->
-                </select>
-            </div>
-
-            <!-- Step 3: Upload Video -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center mb-4">
-                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">3</div>
-                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Upload Your Video</h2>
-                </div>
-                <div id="drop-zone" class="mt-4 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10">
-                    <div class="text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                        <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                            <label for="file-upload" id="file-upload-button" class="relative font-semibold text-purple-600 hover:text-purple-500">
-                                <span>Upload a file</span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                            </label>
-                            <p class="pl-1">or drag and drop</p>
-                        </div>
-                        <p class="text-xs leading-5 text-gray-500">MP4, MOV up to 500MB</p>
-                    </div>
-                </div>
-                <div id="file-info" class="mt-4 text-sm text-gray-700 hidden">
-                    ✓ <span class="font-medium">Uploaded:</span> <span id="file-name"></span>
-                </div>
-            </div>
-
-            <!-- Step 4: Create Caption -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center mb-4">
-                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">4</div>
-                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Create Your Caption</h2>
-                </div>
-                <textarea id="caption-box" rows="4" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm" placeholder="Describe your Reel..."></textarea>
-                <button id="ai-caption-btn" class="mt-3 inline-flex items-center rounded-md border border-transparent bg-purple-100 px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-                    ✨ Auto-generate Caption with AI
-                </button>
-            </div>
-            
-            <!-- Step 5: Schedule Post -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center mb-4">
-                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">5</div>
-                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Schedule Your Post</h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                        <input type="date" name="date" id="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="time" class="block text-sm font-medium text-gray-700">Time</label>
-                        <input type="time" name="time" id="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm">
-                    </div>
-                </div>
-                 <p class="mt-3 text-xs text-gray-500">Leave blank to post immediately.</p>
-            </div>
-
-            <!-- Step 6: Preview & Post -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center mb-4">
-                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">6</div>
-                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Preview & Post</h2>
-                </div>
-                <div class="flex flex-col sm:flex-row items-center gap-6">
-                    <div class="w-40 h-72 bg-gray-900 rounded-2xl flex-shrink-0 flex flex-col p-3 shadow-lg relative">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-8 h-8 bg-gray-700 rounded-full"></div>
-                            <span id="username-preview" class="text-white text-sm font-semibold">@creator_jane</span>
-                        </div>
-                        <div class="flex-grow flex items-center justify-center"><p class="text-white text-center text-sm">Your video preview here.</p></div>
-                        <p id="preview-caption" class="text-white text-xs leading-tight line-clamp-2">Your caption will appear here...</p>
-                    </div>
-                    <div class="text-left">
-                        <p id="consent-text" class="text-gray-600">By clicking the button below, you agree to post the content you've provided to the selected Instagram account.</p>
-                        <p class="mt-4 text-sm text-gray-500">This action requires your authorization.</p>
-                        <button id="post-button" class="mt-4 w-full sm:w-auto cta-button text-white font-bold py-3 px-8 rounded-lg text-lg disabled:bg-gray-400 disabled:shadow-none disabled:cursor-not-allowed" disabled>
-                            Post to Instagram
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 7: Performance Insights -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center mb-4">
-                    <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg">7</div>
-                    <h2 class="ml-4 text-xl font-semibold text-gray-900">Performance Insights</h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                    <div class="bg-gray-100 p-4 rounded-lg"><p class="text-sm font-medium text-gray-500">Views</p><p id="views-stat" class="mt-1 text-3xl font-semibold text-gray-900">--</p><p class="mt-1 text-xs text-gray-500">Daily Impressions</p></div>
-                    <div class="bg-gray-100 p-4 rounded-lg"><p class="text-sm font-medium text-gray-500">Engagement</p><p id="likes-stat" class="mt-1 text-3xl font-semibold text-gray-900">--</p><p class="mt-1 text-xs text-gray-500">Daily Engaged Users</p></div>
-                    <div class="bg-gray-100 p-4 rounded-lg"><p class="text-sm font-medium text-gray-500">Clicks</p><p id="comments-stat" class="mt-1 text-3xl font-semibold text-gray-900">--</p><p class="mt-1 text-xs text-gray-500">Daily Consumptions</p></div>
-                </div>
-                 <p class="text-xs text-gray-400 text-center mt-4">Stats shown are sample data for demo purposes only.</p>
-            </div>
-        </div>
-        
-        <p class="text-xs text-gray-400 text-center mt-6">
-            This is a demo page to illustrate the intended UX flow. OAuth and posting are mocked for review purposes only.
+    <!-- Hero Section -->
+    <main class="container mx-auto px-6 py-24 text-center">
+        <h2 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">
+            面倒なSNS運用を、<br class="hidden md:block" />
+            <span class="gradient-text">AIに丸投げしませんか？</span>
+        </h2>
+        <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+            AIが競合リサーチから「バズる」コンテンツの生成までを全自動化。あなたは完成した投稿候補をダッシュボードで確認するだけです。
         </p>
+        <div class="mt-10">
+            <a href="#pricing" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105 glow-shadow">
+                14日間の無料トライアルを開始
+            </a>
+        </div>
     </main>
 
-    <!-- Custom Alert Box -->
-    <div id="alert-box" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 opacity-0">
-        <div class="bg-white rounded-lg p-8 shadow-xl text-center max-w-sm mx-auto">
-            <div class="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-green-100">
-                <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">データドリブンなコンテンツ制作フロー</h3>
+                <p class="text-gray-400 mt-2">リサーチからコンテンツ完成まで、全てがシームレスに繋がります。</p>
             </div>
-            <h3 class="text-lg font-medium text-gray-900">Success!</h3>
-            <p class="mt-2 text-sm text-gray-500">Your Reel has been scheduled!</p>
-            <button id="alert-close-button" class="mt-6 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg">Close</button>
+            <div class="grid md:grid-cols-3 gap-10 text-center">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h4 class="text-2xl font-semibold text-white">1. リサーチ & 分析</h4>
+                    <p class="text-gray-400 mt-2">キーワードを入力するだけで、関連性の高い人気アカウントを瞬時にリストアップ。パフォーマンスデータを分析し、最適なターゲットを選定します。</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-5xl mb-4">✨</div>
+                    <h4 class="text-2xl font-semibold text-white">2. AIで再創造</h4>
+                    <p class="text-gray-400 mt-2">独自開発の言語モデルが最適なキャプションを生成。最先端の映像エンジンが、動画を唯一無二のオリジナルコンテンツへと昇華させます。</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-5xl mb-4">📋</div>
+                    <h4 class="text-2xl font-semibold text-white">3. コンテンツ管理</h4>
+                    <p class="text-gray-400 mt-2">生成された動画とキャプションは、管理画面のテーブルに自動で整理・保存。いつでも好きな時にダウンロードし、投稿できます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who is this for Section -->
+    <section id="who-is-this-for" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">こんな方におすすめです</h3>
+                <p class="text-gray-400 mt-2">あなたのビジネスを次のレベルへ。</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4">💰</div>
+                    <h4 class="text-2xl font-semibold text-white">アフィリエイトマーケター</h4>
+                    <p class="text-gray-400 mt-2">複数のアカウントを効率的に運用し、収益化までの時間を大幅に短縮したい方。</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4">😂</div>
+                    <h4 class="text-2xl font-semibold text-white">ミーム・まとめ系アカウント</h4>
+                    <p class="text-gray-400 mt-2">コンテンツを探し、編集する手間を省き、投稿の頻度と質を劇的に向上させたい方。</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4">⚡</div>
+                    <h4 class="text-2xl font-semibold text-white">グロースハッカー</h4>
+                    <p class="text-gray-400 mt-2">最新のAIツールを活用して、最速でアカウントを成長させるための新しい戦略を試したい方。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">ライバルに差をつける、圧倒的な機能</h3>
+                <p class="text-gray-400 mt-2">あなたのコンテンツ戦略を、次の次元へ。</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">📈 競合リサーチ機能</h4>
+                    <p class="text-gray-400 mt-2">「裏垢」「グルメ」などのキーワードで市場を分析。有望なベンチマークアカウントをデータに基づき発見し、成功のヒントを掴みます。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🖥️ 直感的なWebダッシュボード</h4>
+                    <p class="text-gray-400 mt-2">リサーチからコンテンツ管理、ダウンロードまで全ての操作がブラウザ上で完結。複雑な設定は一切不要です。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">✍️ 独自開発AIライティング</h4>
+                    <p class="text-gray-400 mt-2">数百万の「バズる」コンテンツを学習した専用言語モデルが、人の心を動かすキャプションとハッシュタグを自動生成します。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🎬 プロ級ビデオエンジン</h4>
+                    <p class="text-gray-400 mt-2">コンテンツの魅力を最大限に引き出す、高度な映像処理エンジンを搭載。ウォーターマーク追加なども自由自在です。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🗂️ コンテンツ管理テーブル</h4>
+                    <p class="text-gray-400 mt-2">生成された全てのコンテンツを一元管理。パフォーマンスデータと紐付けて、効果測定や次の戦略立案に活用できます。</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-white">🛡️ 高度な重複コンテンツ防止</h4>
+                    <p class="text-gray-400 mt-2">独自のデータベースシステムにより、同じコンテンツを誤って再利用する心配はありません。常に新鮮な投稿を維持します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">お客様の声</h3>
+                <p class="text-gray-400 mt-2">すでに多くの方が結果を出しています。</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
+                    <p class="text-gray-300">「トライアルを試したら、3日で効果を実感。即契約しました。1ヶ月でフォロワーが3万人増え、今まで手作業でやっていたのが馬鹿らしくなりました。」</p>
+                    <div class="mt-6">
+                        <p class="font-bold text-white">K. Tanaka 様</p>
+                        <p class="text-sm text-gray-400">アフィリエイトマーケター</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
+                    <p class="text-gray-300">「毎日3時間かかっていたコンテンツ作成の時間がゼロに。空いた時間で新しいアカウントの戦略を練ることができ、ビジネスが加速しています。」</p>
+                    <div class="mt-6">
+                        <p class="font-bold text-white">M. Suzuki 様</p>
+                        <p class="text-sm text-gray-400">コンテンツクリエイター</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
+                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
+                    <p class="text-gray-300">「技術的な知識が全くなくても、ダッシュボードが直感的で使いやすい。サポートも丁寧で、安心して任せられます。」</p>
+                    <div class="mt-6">
+                        <p class="font-bold text-white">A. Sato 様</p>
+                        <p class="text-sm text-gray-400">オンライン事業者</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">あなたに合ったプランを選びましょう</h3>
+                <p class="text-gray-400 mt-2">全てのプランに14日間の無料トライアルが付いています。いつでもキャンセル可能です。</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-orange-400">Starter</h4>
+                        <p class="mt-4 text-gray-300">まずは始めたい個人・小規模アカウント向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            ¥7,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-400">14日間のトライアル終了後</p>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>リサーチ機能（基本）</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月100コンテンツ生成</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>1 ワークスペース</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
+                        </ul>
+                    </div>
+                    <a href="https://buy.stripe.com/eVq9AV64d4k06wX6Io4Rq02" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
+                </div>
+                <!-- Pro Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border-2 border-pink-500 flex flex-col hover-lift relative transform lg:scale-105">
+                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
+                        <span class="bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">一番人気</span>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-pink-400">Pro</h4>
+                        <p class="mt-4 text-gray-300">本格的に収益化を目指すアフィリエイター向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            ¥14,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-400">14日間のトライアル終了後</p>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>リサーチ機能（無制限）</strong></li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月300コンテンツ生成</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>3</strong> ワークスペース</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
+                        </ul>
+                    </div>
+                    <a href="https://buy.stripe.com/00wfZj9gp6s8bRh7Ms4Rq03" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
+                </div>
+                <!-- Agency Plan -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
+                    <div class="flex-grow">
+                        <h4 class="text-2xl font-bold text-teal-400">Agency</h4>
+                        <p class="mt-4 text-gray-300">複数のクライアントを管理する代理店・法人向け</p>
+                        <div class="mt-6 text-4xl font-black text-white">
+                            要問い合わせ
+                        </div>
+                        <p class="mt-2 text-sm text-gray-400">トライアルについてもご相談ください</p>
+                        <ul class="mt-8 space-y-4 text-left">
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>全機能無制限</strong></li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>ワークスペース数 無制限</li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>専任担当者によるサポート</strong></li>
+                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>カスタムオンボーディング</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:pepezar000@gmail.com" class="mt-8 block w-full bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">お問い合わせ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section id="final-cta" class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <div class="bg-gradient-to-r from-orange-500 to-pink-600 p-12 rounded-2xl shadow-2xl">
+                <h3 class="text-4xl font-extrabold text-white">準備はできましたか？</h3>
+                <p class="mt-4 text-lg text-white/90 max-w-2xl mx-auto">
+                    データとAIの力で、SNS運用を新たなステージへ。今すぐその力を体験し、競合を置き去りにしましょう。
+                </p>
+                <div class="mt-8">
+                    <a href="#pricing" class="bg-white text-pink-600 font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105">
+                        最適なプランでトライアルを開始
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-gray-800/50">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white">よくある質問</h3>
+            </div>
+            <div class="space-y-4">
+                <details class="bg-gray-800 p-6 rounded-lg group">
+                    <summary class="flex justify-between items-center cursor-pointer">
+                        <span class="text-lg font-semibold text-white">無料トライアルはどのように機能しますか？</span>
+                        <span class="arrow-down transition-transform transform text-pink-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-gray-400">
+                        トライアルを開始する際にクレジットカード情報の入力が必要ですが、最初の14日間は一切請求されません。トライアル期間が終了する前にキャンセルすれば、料金は発生しません。キャンセルしない場合、14日後に自動的に選択したプランの月額料金が課金されます。
+                    </p>
+                </details>
+                <details class="bg-gray-800 p-6 rounded-lg group">
+                    <summary class="flex justify-between items-center cursor-pointer">
+                        <span class="text-lg font-semibold text-white">利用開始までに何が必要ですか？</span>
+                        <span class="arrow-down transition-transform transform text-pink-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-gray-400">
+                        特別な準備は必要ありません。プランを選択してお支払い情報を登録後、すぐにダッシュボードへアクセスできます。ご不明な点があれば、Telegramのカスタマーサポートが迅速に対応します。
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Section -->
+    <section id="disclaimer" class="py-16">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 text-center">
+                <h3 class="text-xl font-bold text-yellow-300">【重要】免責事項と利用上の注意</h3>
+                <div class="mt-4 text-left space-y-2 text-gray-400 text-xs">
+                   <p><strong>1. 著作権について:</strong> 他人が作成したコンテンツを許可なく再利用することは、著作権侵害にあたる可能性があります。本ツールの利用は、利用者自身の責任で行うものとします。</p>
+                   <p><strong>2. SNSの利用規約:</strong> データ収集や自動化ツールの使用は、各SNSの利用規約に違反する可能性があります。アカウントの凍結等のリスクが伴うことを理解した上で、自己の責任においてご利用ください。</p>
+                   <p><strong>3. 法的責任:</strong> 本ツールの利用によって生じたいかなる問題についても、当方は一切の責任を負いかねます。</p>
+                </div>
+                 <p class="mt-4 text-yellow-300 text-sm font-semibold">
+                    購入・利用を開始した時点で、上記すべての条項に同意したものとみなします。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <a href="tokushoho.html" class="hover:text-pink-400 transition-colors mb-4 block">特定商取引法に基づく表記</a>
+            <p>&copy; 2025 ViralReel Automator. All Rights Reserved.</p>
+            <p class="text-sm mt-2">This tool is not affiliated with Instagram, Facebook, or Meta.</p>
+        </div>
+    </footer>
+
+    <!-- ADDED: Login Modal -->
+    <div id="login-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
+        <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white">ログイン</h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <form class="mt-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300">メールアドレス</label>
+                    <input type="email" name="email" id="email" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                </div>
+                <div class="mt-4">
+                    <label for="password" class="block text-sm font-medium text-gray-300">パスワード</label>
+                    <input type="password" name="password" id="password" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                </div>
+                <div class="mt-6">
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                        ログイン
+                    </button>
+                </div>
+            </form>
+            <div class="mt-6 relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-600"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-gray-800 text-gray-400">または</span>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button class="w-full inline-flex justify-center py-3 px-4 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-sm font-medium text-white hover:bg-gray-600">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Googleでログイン
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Affiliate Tracking Script & Modal Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // --- Configuration for Meta App Review ---
-            const appId = '667267416377258';
-            const redirectUri = 'https://viralreel-automator.com';
-            const scopes = 'instagram_basic,instagram_content_publish,pages_show_list,pages_manage_posts,business_management,pages_read_engagement';
-            const oauthUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${appId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&response_type=token&state=test_user_demo`;
-
-            // --- DOM Element References ---
-            const connectSection = document.getElementById('connect-section');
-            const contentCreationSteps = document.getElementById('content-creation-steps');
-            const fbLoginButton = document.getElementById('fb-login-button');
-            const postButton = document.getElementById('post-button');
-            
-            // --- Function to handle the OAuth redirect ---
-            function handleFacebookLogin() {
-                window.location.href = oauthUrl;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Affiliate Tracking
+            const urlParams = new URLSearchParams(window.location.search);
+            const affiliateId = urlParams.get('ref'); 
+            if (affiliateId) {
+                localStorage.setItem('affiliateRef', affiliateId);
+            }
+            const storedAffiliateId = localStorage.getItem('affiliateRef');
+            if (storedAffiliateId) {
+                const stripeLinks = document.querySelectorAll('a[href*="checkout.stripe.com"], a[href*="buy.stripe.com"]');
+                stripeLinks.forEach(link => {
+                    const originalUrl = link.href;
+                    const newUrl = originalUrl + `?client_reference_id=${storedAffiliateId}`;
+                    link.href = newUrl;
+                });
             }
 
-            // --- Function to set up event listeners for the main app ---
-            function initializeAppEventListeners() {
-                const fileUpload = document.getElementById('file-upload');
-                const fileInfo = document.getElementById('file-info');
-                const fileName = document.getElementById('file-name');
-                const captionBox = document.getElementById('caption-box');
-                const previewCaption = document.getElementById('preview-caption');
-                const aiCaptionBtn = document.getElementById('ai-caption-btn');
-                const alertBox = document.getElementById('alert-box');
-                const alertCloseButton = document.getElementById('alert-close-button');
+            // Modal Logic
+            const loginModal = document.getElementById('login-modal');
+            const loginBtn = document.getElementById('login-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalContent = loginModal.querySelector('div');
 
-                if (fileUpload) {
-                    fileUpload.addEventListener('change', (event) => {
-                        if (event.target.files.length > 0) {
-                            fileName.textContent = event.target.files[0].name;
-                            fileInfo.classList.remove('hidden');
-                        }
-                    });
+            const openModal = () => {
+                loginModal.classList.remove('hidden');
+                setTimeout(() => {
+                    loginModal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            };
+
+            const closeModal = () => {
+                loginModal.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    loginModal.classList.add('hidden');
+                }, 300);
+            };
+
+            loginBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            loginModal.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    closeModal();
                 }
-                if (captionBox) {
-                    captionBox.addEventListener('input', (event) => {
-                        previewCaption.textContent = event.target.value || 'Your caption will appear here...';
-                    });
-                }
-                if (aiCaptionBtn) {
-                    aiCaptionBtn.addEventListener('click', () => {
-                        aiCaptionBtn.textContent = 'Generating...';
-                        setTimeout(() => {
-                            const sampleCaption = "Just finished a great workout! Feeling energized and ready to take on the day. What are your fitness goals? #fitness #workout #motivation";
-                            captionBox.value = sampleCaption;
-                            previewCaption.textContent = sampleCaption;
-                            aiCaptionBtn.textContent = '✨ Auto-generate Caption with AI';
-                        }, 1000);
-                    });
-                }
-                if (postButton) {
-                    postButton.addEventListener('click', () => {
-                        postButton.textContent = "Posting...";
-                        setTimeout(() => {
-                            postButton.textContent = "Posted!";
-                            postButton.disabled = true;
-                            alertBox.classList.remove('hidden');
-                            setTimeout(() => alertBox.style.opacity = '1', 10);
-                        }, 1000);
-                    });
-                }
-                if (alertCloseButton) {
-                    alertCloseButton.addEventListener('click', () => {
-                        alertBox.style.opacity = '0';
-                        setTimeout(() => alertBox.classList.add('hidden'), 300);
-                    });
-                }
-            }
-
-            // --- Function to run after successful login ---
-            async function handleOauthCallback() {
-                const fragment = window.location.hash.substring(1);
-                const params = new URLSearchParams(fragment);
-                const accessToken = params.get('access_token');
-
-                if (!accessToken) {
-                    connectSection.classList.remove('hidden');
-                    contentCreationSteps.classList.add('hidden');
-                    fbLoginButton.addEventListener('click', handleFacebookLogin);
-                    return;
-                }
-
-                console.log('--- META APP REVIEW ---');
-                console.log('Access Token successfully extracted.');
-                
-                // Update UI to show "logged in" state
-                connectSection.classList.add('hidden');
-                document.getElementById('connect-success-message').classList.remove('hidden');
-                contentCreationSteps.classList.remove('hidden');
-                postButton.disabled = false;
-                
-                // Initialize the event listeners for the now-visible app elements
-                initializeAppEventListeners();
-
-                try {
-                    const accountsResponse = await fetch(`https://graph.facebook.com/v18.0/me/accounts?fields=name,instagram_business_account{username,name}&access_token=${accessToken}`);
-                    const accountsData = await accountsResponse.json();
-                    
-                    console.log('--- META APP REVIEW ---');
-                    console.log('API call to /me/accounts demonstrates `pages_show_list` & `business_management`. Response:', accountsData);
-
-                    if (accountsData && accountsData.data && accountsData.data.length > 0) {
-                        const firstPage = accountsData.data[0];
-                        const igAccount = firstPage.instagram_business_account;
-                        const igUsername = igAccount ? `@${igAccount.username}` : firstPage.name;
-
-                        // Update UI elements with the real username
-                        document.getElementById('username-nav').textContent = igUsername;
-                        document.getElementById('username-preview').textContent = igUsername;
-                        document.getElementById('consent-text').innerHTML = `By clicking the button below, you agree to post the content you've provided to the Instagram account connected to <strong>${igUsername}</strong>.`;
-                        document.getElementById('user-initials-nav').textContent = igUsername.substring(1,3).toUpperCase();
-                        
-                        // Populate the account selector dropdown
-                        const accountSelect = document.getElementById('account-select');
-                        accountSelect.innerHTML = '';
-                        accountsData.data.forEach(page => {
-                            const option = document.createElement('option');
-                            option.value = page.id;
-                            option.textContent = page.instagram_business_account ? `${page.name} (@${page.instagram_business_account.username})` : page.name;
-                            accountSelect.appendChild(option);
-                        });
-
-                        const pageId = firstPage.id;
-                        const insightsMetrics = 'page_impressions,page_engaged_users,page_consumptions';
-                        const insightsResponse = await fetch(`https://graph.facebook.com/v18.0/${pageId}/insights?metric=${insightsMetrics}&period=day&access_token=${accessToken}`);
-                        const insightsData = await insightsResponse.json();
-
-                        console.log('--- META APP REVIEW ---');
-                        console.log(`API call to /insights demonstrates \`pages_read_engagement\`. Response:`, insightsData);
-                        
-                        // For Meta Reviewer: Update the Performance Insights section.
-                        // If the API returns valid data, use it. Otherwise, fall back to mock data to ensure the UI is populated.
-                        const viewsStat = document.getElementById('views-stat');
-                        const likesStat = document.getElementById('likes-stat');
-                        const commentsStat = document.getElementById('comments-stat');
-
-                        if (insightsData && insightsData.data && insightsData.data.length > 0) {
-                            const insightsMap = new Map(insightsData.data.map(item => [item.name, item.values[0].value]));
-                            viewsStat.textContent = (insightsMap.get('page_impressions') || 0).toLocaleString();
-                            likesStat.textContent = (insightsMap.get('page_engaged_users') || 0).toLocaleString();
-                            commentsStat.textContent = (insightsMap.get('page_consumptions') || 0).toLocaleString();
-                        } else {
-                            // For Reviewer: Using mock data as a fallback if the test page has no recent activity.
-                            console.log('--- META APP REVIEW ---');
-                            console.log('No insight data returned from API. Using mock data for demonstration.');
-                            viewsStat.textContent = '1,204';
-                            likesStat.textContent = '158';
-                            commentsStat.textContent = '32';
-                        }
-
-                    } else {
-                        document.getElementById('connected-as-message').textContent = 'Connected successfully, but no Instagram Business Accounts were found.';
-                    }
-
-                } catch (error) {
-                    console.error('--- META APP REVIEW ---');
-                    console.error('API call failed:', error);
-                    document.getElementById('connected-as-message').textContent = 'An error occurred while fetching your account details.';
-                }
-            }
-
-            // --- Initial Page Load Logic ---
-            handleOauthCallback();
+            });
         });
     </script>
+
 </body>
 </html>
