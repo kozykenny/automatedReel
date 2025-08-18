@@ -34,7 +34,6 @@
         details[open] summary .arrow-down {
             transform: rotate(180deg);
         }
-        /* Added style for modal */
         .modal-backdrop {
             transition: opacity 0.3s ease;
         }
@@ -53,8 +52,8 @@
                 <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
                 <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
             </nav>
-            <!-- MODIFIED: Added Login and Sign Up buttons -->
-            <div class="flex items-center space-x-4">
+            <!-- MODIFIED: This div will be updated by JavaScript based on login state -->
+            <div id="auth-buttons" class="flex items-center space-x-4">
                 <button id="login-btn" class="text-white hover:text-pink-400 transition-colors">ログイン</button>
                 <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">新規登録</a>
             </div>
@@ -77,7 +76,8 @@
         </div>
     </main>
 
-    <!-- How It Works Section -->
+    <!-- Sections: How It Works, Who is this for, Features, Testimonials, Pricing, CTA, FAQ, Disclaimer -->
+    <!-- These sections remain unchanged from the previous version -->
     <section id="how-it-works" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
@@ -103,8 +103,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Who is this for Section -->
     <section id="who-is-this-for" class="py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
@@ -130,8 +128,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Features Section -->
     <section id="features" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
@@ -166,8 +162,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Testimonials Section -->
     <section id="testimonials" class="py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
@@ -202,8 +196,6 @@
             </div>
         </div>
     </section>
-    
-    <!-- Pricing Section -->
     <section id="pricing" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
@@ -211,7 +203,6 @@
                 <p class="text-gray-400 mt-2">全てのプランに14日間の無料トライアルが付いています。いつでもキャンセル可能です。</p>
             </div>
             <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Starter Plan -->
                 <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
                     <div class="flex-grow">
                         <h4 class="text-2xl font-bold text-orange-400">Starter</h4>
@@ -229,7 +220,6 @@
                     </div>
                     <a href="https://buy.stripe.com/eVq9AV64d4k06wX6Io4Rq02" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
                 </div>
-                <!-- Pro Plan -->
                 <div class="bg-gray-800 p-8 rounded-2xl border-2 border-pink-500 flex flex-col hover-lift relative transform lg:scale-105">
                     <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
                         <span class="bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">一番人気</span>
@@ -250,7 +240,6 @@
                     </div>
                     <a href="https://buy.stripe.com/00wfZj9gp6s8bRh7Ms4Rq03" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
-                <!-- Agency Plan -->
                 <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
                     <div class="flex-grow">
                         <h4 class="text-2xl font-bold text-teal-400">Agency</h4>
@@ -271,8 +260,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Final CTA Section -->
     <section id="final-cta" class="py-20">
         <div class="container mx-auto px-6 text-center">
             <div class="bg-gradient-to-r from-orange-500 to-pink-600 p-12 rounded-2xl shadow-2xl">
@@ -288,8 +275,6 @@
             </div>
         </div>
     </section>
-
-    <!-- FAQ Section -->
     <section id="faq" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6 max-w-4xl">
             <div class="text-center mb-16">
@@ -321,8 +306,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Disclaimer Section -->
     <section id="disclaimer" class="py-16">
         <div class="container mx-auto px-6 max-w-4xl">
             <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 text-center">
@@ -348,21 +331,23 @@
         </div>
     </footer>
 
-    <!-- ADDED: Login Modal -->
+    <!-- Login Modal -->
     <div id="login-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
         <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-white">ログイン</h2>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
             </div>
-            <form class="mt-6">
+            <!-- MODIFIED: Added form ID and error message placeholder -->
+            <form id="login-form" class="mt-6">
+                <div id="error-message" class="hidden bg-red-900/50 border border-red-500 text-red-300 text-sm rounded-md p-3 mb-4"></div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300">メールアドレス</label>
-                    <input type="email" name="email" id="email" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                    <input type="email" name="email" id="email" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
                 </div>
                 <div class="mt-4">
                     <label for="password" class="block text-sm font-medium text-gray-300">パスワード</label>
-                    <input type="password" name="password" id="password" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                    <input type="password" name="password" id="password" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
                 </div>
                 <div class="mt-6">
                     <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
@@ -379,7 +364,8 @@
                 </div>
             </div>
             <div class="mt-6">
-                <button class="w-full inline-flex justify-center py-3 px-4 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-sm font-medium text-white hover:bg-gray-600">
+                <!-- MODIFIED: Added ID to Google login button -->
+                <button id="google-login-btn" class="w-full inline-flex justify-center py-3 px-4 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-sm font-medium text-white hover:bg-gray-600">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -392,10 +378,155 @@
         </div>
     </div>
 
-    <!-- Affiliate Tracking Script & Modal Script -->
-    <script>
+    <!-- ADDED: Firebase SDK and Auth Logic -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        // Import Authentication functions
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signInWithEmailAndPassword, 
+            signInWithPopup, 
+            GoogleAuthProvider,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
+            authDomain: "viral-reel-automator.firebaseapp.com",
+            projectId: "viral-reel-automator",
+            storageBucket: "viral-reel-automator.appspot.com", // Corrected domain
+            messagingSenderId: "149388169567",
+            appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
+            measurementId: "G-8N6L9GDKNC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // --- DOM Elements ---
+        const loginModal = document.getElementById('login-modal');
+        const loginBtn = document.getElementById('login-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalContent = loginModal.querySelector('div');
+        const loginForm = document.getElementById('login-form');
+        const googleLoginBtn = document.getElementById('google-login-btn');
+        const authButtonsContainer = document.getElementById('auth-buttons');
+        const errorMessageDiv = document.getElementById('error-message');
+
+        // --- Modal Logic ---
+        const openModal = () => {
+            loginModal.classList.remove('hidden');
+            setTimeout(() => {
+                loginModal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        };
+
+        const closeModal = () => {
+            errorMessageDiv.classList.add('hidden'); // Hide error on close
+            loginModal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                loginModal.classList.add('hidden');
+            }, 300);
+        };
+
+        loginBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeModal();
+        });
+
+        // --- Authentication Logic ---
+
+        // Function to show error messages in the modal
+        const showAuthError = (message) => {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+        };
+
+        // Handle Email/Password Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    console.log('Logged in user:', userCredential.user);
+                    closeModal();
+                    // You would typically redirect to the dashboard here
+                    // window.location.href = '/dashboard.html';
+                })
+                .catch((error) => {
+                    console.error("Login Error:", error.code, error.message);
+                    // Provide user-friendly error messages
+                    let message = "ログインに失敗しました。もう一度お試しください。";
+                    if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                        message = "メールアドレスまたはパスワードが間違っています。";
+                    }
+                    showAuthError(message);
+                });
+        });
+
+        // Handle Google Login
+        googleLoginBtn.addEventListener('click', () => {
+            signInWithPopup(auth, googleProvider)
+                .then((result) => {
+                    console.log('Logged in with Google:', result.user);
+                    closeModal();
+                    // You would typically redirect to the dashboard here
+                    // window.location.href = '/dashboard.html';
+                }).catch((error) => {
+                    console.error("Google Login Error:", error.code, error.message);
+                    showAuthError("Googleでのログインに失敗しました。");
+                });
+        });
+
+        // Handle Logout
+        const handleLogout = () => {
+            signOut(auth).then(() => {
+                console.log('User signed out.');
+                // You would typically redirect to the homepage here
+                // window.location.href = '/';
+            }).catch((error) => {
+                console.error('Sign out error', error);
+            });
+        };
+        
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                console.log('Auth state changed: Logged in as', user.email);
+                // Update UI to show logged-in state
+                authButtonsContainer.innerHTML = `
+                    <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
+                    <button id="logout-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', handleLogout);
+
+            } else {
+                // User is signed out
+                console.log('Auth state changed: Logged out');
+                // Update UI to show logged-out state
+                authButtonsContainer.innerHTML = `
+                    <button id="login-btn-dynamic" class="text-white hover:text-pink-400 transition-colors">ログイン</button>
+                    <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">新規登録</a>
+                `;
+                // Re-attach the event listener to the new login button
+                document.getElementById('login-btn-dynamic').addEventListener('click', openModal);
+            }
+        });
+
+        // --- Affiliate Tracking Logic ---
         document.addEventListener('DOMContentLoaded', function() {
-            // Affiliate Tracking
             const urlParams = new URLSearchParams(window.location.search);
             const affiliateId = urlParams.get('ref'); 
             if (affiliateId) {
@@ -410,36 +541,6 @@
                     link.href = newUrl;
                 });
             }
-
-            // Modal Logic
-            const loginModal = document.getElementById('login-modal');
-            const loginBtn = document.getElementById('login-btn');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const modalContent = loginModal.querySelector('div');
-
-            const openModal = () => {
-                loginModal.classList.remove('hidden');
-                setTimeout(() => {
-                    loginModal.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
-                }, 10);
-            };
-
-            const closeModal = () => {
-                loginModal.classList.add('opacity-0');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => {
-                    loginModal.classList.add('hidden');
-                }, 300);
-            };
-
-            loginBtn.addEventListener('click', openModal);
-            closeModalBtn.addEventListener('click', closeModal);
-            loginModal.addEventListener('click', (e) => {
-                if (e.target === loginModal) {
-                    closeModal();
-                }
-            });
         });
     </script>
 
