@@ -52,7 +52,7 @@
                 <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
                 <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
             </nav>
-            <!-- MODIFIED: Removed "Sign Up" button. Only Login is available. -->
+            <!-- MODIFIED: UI is now controlled by auth state, only showing Login or Dashboard -->
             <div id="auth-buttons" class="flex items-center space-x-4">
                 <button id="login-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
             </div>
@@ -336,7 +336,6 @@
                 <h2 class="text-2xl font-bold text-white">ログイン</h2>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
             </div>
-            <!-- MODIFIED: Added form ID and error message placeholder -->
             <form id="login-form" class="mt-6">
                 <div id="error-message" class="hidden bg-red-900/50 border border-red-500 text-red-300 text-sm rounded-md p-3 mb-4"></div>
                 <div>
@@ -362,7 +361,6 @@
                 </div>
             </div>
             <div class="mt-6">
-                <!-- MODIFIED: Added ID to Google login button -->
                 <button id="google-login-btn" class="w-full inline-flex justify-center py-3 px-4 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-sm font-medium text-white hover:bg-gray-600">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -376,11 +374,11 @@
         </div>
     </div>
 
-    <!-- ADDED: Firebase SDK and Auth Logic -->
+    <!-- Firebase SDK and Auth Logic -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
+        // Import Firebase core functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        // Import Authentication functions
+        // Import Firebase Auth functions
         import { 
             getAuth, 
             onAuthStateChanged, 
@@ -389,13 +387,21 @@
             GoogleAuthProvider,
             signOut
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // MODIFIED: Import Firestore functions to check for subscriptions
+        import { 
+            getFirestore,
+            collection,
+            query,
+            where,
+            getDocs
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
             authDomain: "viral-reel-automator.firebaseapp.com",
             projectId: "viral-reel-automator",
-            storageBucket: "viral-reel-automator.appspot.com", // Corrected domain
+            storageBucket: "viral-reel-automator.appspot.com",
             messagingSenderId: "149388169567",
             appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
             measurementId: "G-8N6L9GDKNC"
@@ -404,6 +410,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app); // Initialize Firestore
         const googleProvider = new GoogleAuthProvider();
 
         // --- DOM Elements ---
@@ -426,99 +433,102 @@
         };
 
         const closeModal = () => {
-            errorMessageDiv.classList.add('hidden'); // Hide error on close
+            errorMessageDiv.classList.add('hidden');
             loginModal.classList.add('opacity-0');
             modalContent.classList.add('scale-95');
             setTimeout(() => {
                 loginModal.classList.add('hidden');
             }, 300);
         };
-
-        loginBtn.addEventListener('click', openModal);
+        
         closeModalBtn.addEventListener('click', closeModal);
         loginModal.addEventListener('click', (e) => {
             if (e.target === loginModal) closeModal();
         });
 
         // --- Authentication Logic ---
-
-        // Function to show error messages in the modal
         const showAuthError = (message) => {
             errorMessageDiv.textContent = message;
             errorMessageDiv.classList.remove('hidden');
         };
 
-        // Handle Email/Password Login
-        loginForm.addEventListener('submit', (e) => {
+        // MODIFIED: Function to check for an active Stripe subscription
+        const checkActiveSubscription = async (user) => {
+            if (!user) return false;
+            try {
+                const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
+                const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
+                const querySnapshot = await getDocs(q);
+                return !querySnapshot.empty; // Returns true if any active/trialing subscription is found
+            } catch (error) {
+                console.error("Subscription check failed:", error);
+                return false; // Failsafe
+            }
+        };
+
+        const handleLoginSuccess = async (user) => {
+            const isActive = await checkActiveSubscription(user);
+            if (isActive) {
+                console.log("Active subscription found. Access granted.");
+                closeModal();
+                window.location.href = '/dashboard.html'; // Redirect to dashboard
+            } else {
+                console.log("No active subscription found.");
+                showAuthError("有効なプランが見つかりません。プランをご購入ください。");
+                await signOut(auth); // Log out the user if they don't have a subscription
+            }
+        };
+
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = loginForm.email.value;
             const password = loginForm.password.value;
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    console.log('Logged in user:', userCredential.user);
-                    closeModal();
-                    // You would typically redirect to the dashboard here
-                    // window.location.href = '/dashboard.html';
-                })
-                .catch((error) => {
-                    console.error("Login Error:", error.code, error.message);
-                    // Provide user-friendly error messages
-                    let message = "ログインに失敗しました。もう一度お試しください。";
-                    if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                        message = "メールアドレスまたはパスワードが間違っています。";
-                    }
-                    showAuthError(message);
-                });
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                await handleLoginSuccess(userCredential.user);
+            } catch (error) {
+                console.error("Login Error:", error.code, error.message);
+                let message = "ログインに失敗しました。";
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    message = "メールアドレスまたはパスワードが間違っています。";
+                }
+                showAuthError(message);
+            }
         });
 
-        // Handle Google Login
-        googleLoginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, googleProvider)
-                .then((result) => {
-                    console.log('Logged in with Google:', result.user);
-                    closeModal();
-                    // You would typically redirect to the dashboard here
-                    // window.location.href = '/dashboard.html';
-                }).catch((error) => {
-                    console.error("Google Login Error:", error.code, error.message);
-                    showAuthError("Googleでのログインに失敗しました。");
-                });
+        googleLoginBtn.addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                await handleLoginSuccess(result.user);
+            } catch (error) {
+                console.error("Google Login Error:", error.code, error.message);
+                showAuthError("Googleでのログインに失敗しました。");
+            }
         });
 
-        // Handle Logout
         const handleLogout = () => {
-            signOut(auth).then(() => {
-                console.log('User signed out.');
-                // You would typically redirect to the homepage here
-                // window.location.href = '/';
-            }).catch((error) => {
-                console.error('Sign out error', error);
-            });
+            signOut(auth).catch((error) => console.error('Sign out error', error));
         };
         
-        // Listen for authentication state changes
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in
-                console.log('Auth state changed: Logged in as', user.email);
-                // Update UI to show logged-in state
-                authButtonsContainer.innerHTML = `
-                    <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
-                    <button id="logout-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
-                `;
-                document.getElementById('logout-btn').addEventListener('click', handleLogout);
-
+                const isActive = await checkActiveSubscription(user);
+                if (isActive) {
+                    // User is signed in AND has an active subscription
+                    authButtonsContainer.innerHTML = `
+                        <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
+                        <button id="logout-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                    `;
+                    document.getElementById('logout-btn').addEventListener('click', handleLogout);
+                } else {
+                    // User is signed in but has NO active subscription, log them out
+                    await signOut(auth);
+                }
             } else {
                 // User is signed out
-                console.log('Auth state changed: Logged out');
-                // Update UI to show logged-out state
                 authButtonsContainer.innerHTML = `
-                    <button id="login-btn-dynamic" class="text-white hover:text-pink-400 transition-colors">ログイン</button>
-                    <a href="#pricing" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">新規登録</a>
+                    <button id="login-btn-dynamic" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
                 `;
-                // Re-attach the event listener to the new login button
                 document.getElementById('login-btn-dynamic').addEventListener('click', openModal);
             }
         });
