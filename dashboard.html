@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ViralReel Automator — ダッシュボード</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter','Noto Sans JP',sans-serif; }
+    .grad { background: linear-gradient(90deg,#F97316,#EC4899); }
+    .grad-text { background: linear-gradient(90deg,#F97316,#EC4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .badge { border: 1px solid rgba(255,255,255,.15); }
+    .blur-locked { filter: blur(2px); pointer-events: none; user-select: none; }
+    .tag { border:1px solid #374151; background:#111827; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+  <!-- Top Nav -->
+  <header class="sticky top-0 z-40 bg-gray-900/80 backdrop-blur border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <div class="font-extrabold text-lg grad-text">ViralReel Automator</div>
+      <div class="flex items-center gap-3">
+        <span id="plan-badge" class="px-3 py-1 rounded-full text-xs badge">Checking…</span>
+        <a href="/pricing#upgrade" id="upgrade-link" class="hidden text-sm text-pink-400 hover:text-pink-300">アップグレード</a>
+        <button id="logout" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm">ログアウト</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Trial Banner -->
+  <div id="trial-banner" class="hidden grad text-white">
+    <div class="max-w-7xl mx-auto px-5 py-3 text-sm flex items-center justify-between">
+      <div>
+        <strong>トライアルモード</strong> — 一部機能が制限されています。<span id="trial-usage-text"></span>
+      </div>
+      <a href="/pricing#upgrade" class="bg-white/15 hover:bg-white/25 border border-white/30 px-3 py-1 rounded">今すぐアップグレード</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-5 py-8 space-y-10">
+    <!-- Stepper -->
+    <section class="grid md:grid-cols-3 gap-4">
+      <div class="bg-gray-800/60 rounded-2xl border border-gray-700 p-5">
+        <div class="text-xs uppercase tracking-widest text-gray-400 mb-2">STEP 1</div>
+        <h2 class="text-xl font-bold">キーワードでリサーチ</h2>
+        <p class="text-gray-400 text-sm mt-1">市場/ジャンルのキーワードを入力して候補アカウントを抽出します。</p>
+        <form id="form-research" class="mt-4 space-y-3">
+          <input id="kw" type="text" placeholder="例：裏垢, meme, グルメ"
+                 class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-pink-500 focus:border-pink-500" required />
+          <div class="flex items-center gap-3">
+            <button class="bg-pink-600 hover:bg-pink-700 px-4 py-2 rounded-lg font-semibold" type="submit">リサーチ開始</button>
+            <span id="research-status" class="text-xs text-gray-400"></span>
+          </div>
+        </form>
+      </div>
+      <div class="bg-gray-800/60 rounded-2xl border border-gray-700 p-5">
+        <div class="text-xs uppercase tracking-widest text-gray-400 mb-2">STEP 2</div>
+        <h2 class="text-xl font-bold">アカウント選択 & スクレイプ</h2>
+        <p class="text-gray-400 text-sm mt-1">抽出されたアカウントから選択し、スクレイプ数を指定します。</p>
+        <form id="form-scrape" class="mt-4 space-y-3">
+          <div id="account-pills" class="flex flex-wrap gap-2"></div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-300">動画数</label>
+            <input id="video-count" type="number" min="1" max="50" value="10"
+                   class="w-24 bg-gray-700 border border-gray-600 rounded px-2 py-1" />
+            <span class="text-xs text-gray-400">(トライアルは最大 <span id="trial-cap">10</span>)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg font-semibold" type="submit">スクレイプ実行</button>
+            <span id="scrape-status" class="text-xs text-gray-400"></span>
+          </div>
+        </form>
+      </div>
+      <div class="bg-gray-800/60 rounded-2xl border border-gray-700 p-5">
+        <div class="text-xs uppercase tracking-widest text-gray-400 mb-2">STEP 3</div>
+        <h2 class="text-xl font-bold">コンテンツ管理</h2>
+        <p class="text-gray-400 text-sm mt-1">生成/取得した動画とメタデータを一覧で管理します。</p>
+        <div class="mt-4 flex gap-2">
+          <button id="refresh" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg">更新</button>
+          <a href="/pricing#upgrade" id="export-all" class="bg-teal-600 hover:bg-teal-700 px-3 py-2 rounded-lg hidden">全件ダウンロード</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results: Accounts -->
+    <section>
+      <h3 class="text-lg font-bold mb-3">リサーチ結果（アカウント）</h3>
+      <div id="accounts-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div id="accounts-empty" class="text-gray-500 text-sm">まだ結果はありません。キーワードでリサーチしてください。</div>
+    </section>
+
+    <!-- Results: Videos table -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-bold">スクレイプ済みコンテンツ</h3>
+        <div class="text-xs text-gray-400">Google Drive と Airtable に保存されています</div>
+      </div>
+      <div class="overflow-x-auto rounded-xl border border-gray-800">
+        <table class="min-w-full divide-y divide-gray-800">
+          <thead class="bg-gray-800/40">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300">プレビュー</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300">タイトル/説明</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300">アカウント</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300">視聴/いいね</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300">日付</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-gray-300">操作</th>
+            </tr>
+          </thead>
+          <tbody id="videos-table" class="divide-y divide-gray-800"></tbody>
+        </table>
+      </div>
+      <div id="videos-empty" class="text-gray-500 text-sm mt-3">まだコンテンツはありません。アカウントを選択してスクレイプしてください。</div>
+    </section>
+  </main>
+
+  <!-- Firebase + App Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // --- Firebase config (reuse yours) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
+      authDomain: "viral-reel-automator.firebaseapp.com",
+      projectId: "viral-reel-automator",
+      storageBucket: "viral-reel-automator.appspot.com",
+      messagingSenderId: "149388169567",
+      appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
+      measurementId: "G-8N6L9GDKNC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // --- DOM refs ---
+    const planBadge = document.getElementById('plan-badge');
+    const upgradeLink = document.getElementById('upgrade-link');
+    const trialBanner = document.getElementById('trial-banner');
+    const trialUsageText = document.getElementById('trial-usage-text');
+    const trialCapEl = document.getElementById('trial-cap');
+
+    const formResearch = document.getElementById('form-research');
+    const kwInput = document.getElementById('kw');
+    const researchStatus = document.getElementById('research-status');
+
+    const accountPills = document.getElementById('account-pills');
+    const accountsGrid = document.getElementById('accounts-grid');
+    const accountsEmpty = document.getElementById('accounts-empty');
+
+    const formScrape = document.getElementById('form-scrape');
+    const videoCount = document.getElementById('video-count');
+    const scrapeStatus = document.getElementById('scrape-status');
+
+    const videosTable = document.getElementById('videos-table');
+    const videosEmpty = document.getElementById('videos-empty');
+    const refreshBtn = document.getElementById('refresh');
+    const exportAll = document.getElementById('export-all');
+
+    document.getElementById('logout').onclick = () => signOut(auth);
+
+    // ---- App Config (n8n endpoints) ----
+    // NOTE: Replace these with your own n8n webhook URLs (self-hosted)
+    const N8N_ENDPOINTS = {
+      research: 'https://YOUR_N8N_HOST/webhook/research',
+      scrape:   'https://YOUR_N8N_HOST/webhook/scrape',
+      list:     'https://YOUR_N8N_HOST/webhook/list-videos',
+      download: 'https://YOUR_N8N_HOST/webhook/download' // given an asset id, returns a signed URL
+    };
+
+    // Trial limits (frontend guard; backend should also enforce!)
+    const TRIAL = {
+      maxVideosPerScrape: 10,
+      maxTotalVideos: 20
+    };
+
+    let userCtx = { uid:null, plan:'checking', isTrial:false, trialUsed:0 };
+    let selectedAccounts = new Set();
+
+    // --- Auth gating + subscription check ---
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        location.href = '/';
+        return;
+      }
+      userCtx.uid = user.uid;
+
+      // Pull subscription status
+      const subRef = collection(db, 'customers', user.uid, 'subscriptions');
+      const qy = query(subRef, where('status','in',['trialing','active']));
+      const snap = await getDocs(qy);
+      if (snap.empty) {
+        location.href = '/pricing#upgrade';
+        return;
+      }
+
+      // If trialing, fetch usage doc (optional) e.g. /customers/{uid}/limits/usage
+      userCtx.plan = 'active';
+      userCtx.isTrial = snap.docs[0].data().status === 'trialing';
+
+      planBadge.textContent = userCtx.isTrial ? 'Trial' : 'Pro';
+      planBadge.className = 'px-3 py-1 rounded-full text-xs badge ' + (userCtx.isTrial ? 'bg-yellow-900/40 text-yellow-200' : 'bg-green-900/30 text-green-200');
+      upgradeLink.classList.toggle('hidden', !userCtx.isTrial);
+
+      if (userCtx.isTrial) {
+        trialBanner.classList.remove('hidden');
+        trialCapEl.textContent = TRIAL.maxVideosPerScrape;
+        // (Optional) read usage count from Firestore
+        try {
+          const usageDoc = await getDoc(doc(db, 'customers', user.uid, 'limits', 'usage'));
+          userCtx.trialUsed = usageDoc.exists() ? (usageDoc.data().totalVideos||0) : 0;
+        } catch(e) {}
+        updateTrialUsageText();
+      }
+
+      // Initial load of content
+      await loadVideos();
+    });
+
+    function updateTrialUsageText(){
+      trialUsageText.textContent = ` — 使⽤: ${userCtx.trialUsed}/${TRIAL.maxTotalVideos} 件`;
+    }
+
+    // --- UI Handlers ---
+    formResearch.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const kw = kwInput.value.trim();
+      if (!kw) return;
+      researchStatus.textContent = '送信中…';
+      try {
+        const res = await fetch(N8N_ENDPOINTS.research, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ uid:userCtx.uid, keyword: kw })
+        });
+        const data = await res.json();
+        // Expect data.accounts: [{id, handle, name, avatar, score, followers}]
+        renderAccounts(data.accounts||[]);
+        researchStatus.textContent = '完了';
+      } catch (e) {
+        researchStatus.textContent = 'エラー';
+      }
+    });
+
+    formScrape.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (selectedAccounts.size === 0) {
+        scrapeStatus.textContent = 'アカウントを選択してください';
+        return;
+      }
+
+      let count = Number(videoCount.value||0);
+      if (userCtx.isTrial) count = Math.min(count, TRIAL.maxVideosPerScrape);
+
+      // Frontend guard for trial total
+      if (userCtx.isTrial && (userCtx.trialUsed + count) > TRIAL.maxTotalVideos) {
+        scrapeStatus.textContent = `トライアル上限 (${TRIAL.maxTotalVideos}) を超えます。`;
+        return;
+      }
+
+      scrapeStatus.textContent = '実行中…';
+      try {
+        const res = await fetch(N8N_ENDPOINTS.scrape, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            uid: userCtx.uid,
+            accounts: Array.from(selectedAccounts),
+            count
+          })
+        });
+        await res.json();
+        scrapeStatus.textContent = '完了。処理反映まで少々お待ちください';
+        await loadVideos();
+      } catch (e) {
+        scrapeStatus.textContent = 'エラー';
+      }
+    });
+
+    refreshBtn.addEventListener('click', loadVideos);
+
+    // --- Renderers ---
+    function renderAccounts(accounts){
+      accountsGrid.innerHTML = '';
+      accountPills.innerHTML = '';
+      selectedAccounts.clear();
+
+      if (!accounts || accounts.length === 0) {
+        accountsEmpty.classList.remove('hidden');
+        return;
+      }
+      accountsEmpty.classList.add('hidden');
+
+      accounts.forEach(acc => {
+        // grid card
+        const card = document.createElement('div');
+        card.className = 'bg-gray-800 rounded-xl border border-gray-700 p-4 flex items-center gap-3';
+        card.innerHTML = `
+          <img src="${acc.avatar||'https://placehold.co/64x64'}" class="w-12 h-12 rounded-full object-cover"/>
+          <div class="flex-1">
+            <div class="font-semibold">${acc.name||acc.handle}</div>
+            <div class="text-xs text-gray-400">@${acc.handle||'-'} · ${fmtNum(acc.followers)} フォロワー</div>
+          </div>
+          <div class="text-xs text-gray-400">Score ${acc.score??'-'}</div>
+          <button class="select-btn bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg text-sm">選択</button>
+        `;
+        const btn = card.querySelector('.select-btn');
+        btn.onclick = () => toggleAccount(acc.handle, btn);
+        accountsGrid.appendChild(card);
+
+        // pill list
+        const pill = document.createElement('button');
+        pill.className = 'tag rounded-full px-3 py-1 text-xs hover:bg-gray-700';
+        pill.textContent = '@' + (acc.handle||'');
+        pill.onclick = () => toggleAccount(acc.handle, pill);
+        accountPills.appendChild(pill);
+      });
+    }
+
+    function toggleAccount(handle, el){
+      if (!handle) return;
+      if (selectedAccounts.has(handle)) {
+        selectedAccounts.delete(handle);
+        el.classList.remove('ring','ring-pink-500');
+      } else {
+        selectedAccounts.add(handle);
+        el.classList.add('ring','ring-pink-500');
+      }
+    }
+
+    async function loadVideos(){
+      try {
+        const res = await fetch(N8N_ENDPOINTS.list + `?uid=${encodeURIComponent(userCtx.uid)}`);
+        const data = await res.json();
+        renderVideos(data.items||[]);
+      } catch(e) {
+        // noop
+      }
+    }
+
+    function renderVideos(items){
+      videosTable.innerHTML = '';
+      const has = items && items.length>0;
+      videosEmpty.classList.toggle('hidden', has);
+
+      items.forEach(v => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-4 py-3">
+            <video src="${v.previewUrl||''}" class="w-28 h-16 bg-black rounded" muted playsinline></video>
+          </td>
+          <td class="px-4 py-3">
+            <div class="font-semibold line-clamp-2">${esc(v.title)||'—'}</div>
+            <div class="text-xs text-gray-400 line-clamp-2">${esc(v.caption)||''}</div>
+          </td>
+          <td class="px-4 py-3 text-sm text-gray-300">@${v.account||'-'}</td>
+          <td class="px-4 py-3 text-sm text-gray-300">${fmtNum(v.views)} / ${fmtNum(v.likes)}</td>
+          <td class="px-4 py-3 text-sm text-gray-300">${fmtDate(v.postedAt)}</td>
+          <td class="px-4 py-3 text-right">
+            ${downloadButtonHtml(v)}
+          </td>
+        `;
+        videosTable.appendChild(tr);
+      });
+
+      // attach download handlers
+      document.querySelectorAll('[data-dl-id]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-dl-id');
+          btn.disabled = true; btn.textContent = '生成中…';
+          try {
+            const res = await fetch(N8N_ENDPOINTS.download + `?uid=${encodeURIComponent(userCtx.uid)}&id=${encodeURIComponent(id)}`);
+            const { url } = await res.json();
+            if (url) window.location.href = url;
+          } finally {
+            btn.disabled = false; btn.textContent = 'ダウンロード';
+          }
+        });
+      });
+
+      // Lock features in trial
+      if (userCtx.isTrial) {
+        document.querySelectorAll('[data-need-paid=true]').forEach(el => el.classList.add('blur-locked'));
+        exportAll.classList.add('hidden');
+      } else {
+        exportAll.classList.remove('hidden');
+      }
+    }
+
+    function downloadButtonHtml(v){
+      const needPaid = v?.isEdited || false; // example: edited assets require paid
+      const lockAttr = needPaid ? 'data-need-paid="true"' : '';
+      return `<button ${lockAttr} data-dl-id="${v.id}" class="bg-teal-600 hover:bg-teal-700 px-3 py-1.5 rounded-lg text-sm">ダウンロード</button>`;
+    }
+
+    // --- utils ---
+    function fmtNum(n){ if(n==null) return '—'; const x=Number(n)||0; return x.toLocaleString('ja-JP'); }
+    function fmtDate(s){ if(!s) return '—'; const d=new Date(s); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`; }
+    function esc(s){ return (s||'').toString().replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+  </script>
+</body>
+</html>
