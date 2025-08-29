@@ -119,16 +119,17 @@
         }
 
         const uid = user.uid;
-        const subCol = collection(db, "users", uid, "subscriptions");
+        const subCol = collection(db, "customers", uid, "subscriptions");
         const subSnap = await getDocs(subCol);
         let hasActivePlan = false;
-
-        subSnap.forEach(doc => {
+        
+        subSnap.forEach((doc) => {
           const sub = doc.data();
-          if (sub.status === "active") {
+          if (["active", "trialing"].includes(sub.status)) {
             hasActivePlan = true;
           }
         });
+
 
         if (!hasActivePlan) {
           window.location.href = "/pricing.html";
