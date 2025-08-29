@@ -391,6 +391,14 @@
             GoogleAuthProvider,
             signOut
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // ADDED: Import Firestore functions to check subscriptions
+        import {
+            getFirestore,
+            collection,
+            query,
+            where,
+            getDocs
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -406,6 +414,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app); // ADDED: Initialize Firestore
         const googleProvider = new GoogleAuthProvider();
 
         // --- DOM Elements ---
@@ -525,22 +534,52 @@
             }
         });
 
-        // --- Header UI and Auth State Change ---
+        // --- NEW: Subscription Check Function ---
+        const checkActiveSubscription = async (user) => {
+            if (!user) return false;
+            try {
+                // Path to the subscriptions collection for the user, as created by the Stripe extension
+                const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
+                // Query for active or trialing subscriptions
+                const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
+                const querySnapshot = await getDocs(q);
+                return !querySnapshot.empty; // Returns true if any active/trialing subscriptions exist
+            } catch (e) {
+                console.error("Subscription check failed:", e);
+                return false;
+            }
+        };
+
+
+        // --- UPDATED: Header UI and Auth State Change ---
         const handleLogout = () => signOut(auth).catch((e) => console.error('Sign out error', e));
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                authButtonsContainer.innerHTML = `
-                    <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
-                    <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
-                `;
-                document.getElementById('logout-btn').addEventListener('click', handleLogout);
+                const isActive = await checkActiveSubscription(user);
+                
+                if (isActive) {
+                    // User is logged in and HAS an active subscription
+                    authButtonsContainer.innerHTML = `
+                        <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
+                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                    `;
+                    document.getElementById('logout-btn').addEventListener('click', handleLogout);
+                } else {
+                    // User is logged in but has NO active subscription
+                    authButtonsContainer.innerHTML = `
+                        <a href="#pricing" class="text-orange-400 hover:text-orange-300 font-medium transition-colors">プランを選択</a>
+                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                    `;
+                    document.getElementById('logout-btn').addEventListener('click', handleLogout);
+                }
 
                 if (typeof postLoginAction === 'function') {
                     postLoginAction();
                     postLoginAction = null;
                 }
             } else {
+                // User is logged out
                 authButtonsContainer.innerHTML = `
                     <button id="signup-btn-header" class="text-white hover:text-pink-400 font-medium transition-colors">新規登録</button>
                     <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
@@ -550,7 +589,7 @@
             }
         });
 
-        // --- Checkout Logic ---
+        // --- Checkout Logic (No changes needed here) ---
         window.startCheckout = function(baseUrl) {
             const user = auth.currentUser;
             if (user) {
@@ -580,3 +619,4 @@
 
 </body>
 </html>
+
