@@ -95,8 +95,8 @@
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
@@ -114,21 +114,28 @@
 
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
-          window.location.href = "/"; // not logged in
+          window.location.href = "/";
           return;
         }
 
         const uid = user.uid;
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
+        const subCol = collection(db, "users", uid, "subscriptions");
+        const subSnap = await getDocs(subCol);
+        let hasActivePlan = false;
 
-        if (!userSnap.exists()) {
-          window.location.href = "/pricing.html"; // no linked payment
+        subSnap.forEach(doc => {
+          const sub = doc.data();
+          if (sub.status === "active") {
+            hasActivePlan = true;
+          }
+        });
+
+        if (!hasActivePlan) {
+          window.location.href = "/pricing.html";
           return;
         }
 
-        const email = user.email;
-        document.getElementById("userInfo").innerText = `ログイン中: ${email}`;
+        document.getElementById("userInfo").innerText = `ログイン中: ${user.email}`;
         document.getElementById("mainApp").style.display = "block";
       });
 
