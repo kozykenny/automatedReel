@@ -52,9 +52,9 @@
                 <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
                 <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
             </nav>
-            <!-- MODIFIED: UI is now controlled by auth state, only showing Login or Dashboard -->
+            <!-- Auth buttons are dynamically inserted here by Firebase script -->
             <div id="auth-buttons" class="flex items-center space-x-4">
-                <button id="login-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
+                <!-- This will be populated by onAuthStateChanged -->
             </div>
         </div>
     </header>
@@ -69,9 +69,10 @@
             AIが競合リサーチから「バズる」コンテンツの生成までを全自動化。あなたは完成した投稿候補をダッシュボードで確認するだけです。
         </p>
         <div class="mt-10">
-            <a href="#pricing" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105 glow-shadow">
+            <!-- The startCheckout function will handle the auth flow -->
+            <button onclick="startCheckout('https://buy.stripe.com/00wfZj9gp6s8bRh7Ms4Rq03')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105 glow-shadow">
                 14日間の無料トライアルを開始
-            </a>
+            </button>
         </div>
     </main>
 
@@ -129,7 +130,7 @@
     <section id="features" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text白">ライバルに差をつける、圧倒的な機能</h3>
+                <h3 class="text-4xl font-bold text-white">ライバルに差をつける、圧倒的な機能</h3>
                 <p class="text-gray-400 mt-2">あなたのコンテンツ戦略を、次の次元へ。</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -179,7 +180,7 @@
                     <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
                     <p class="text-gray-300">「毎日3時間かかっていたコンテンツ作成の時間がゼロに。空いた時間で新しいアカウントの戦略を練ることができ、ビジネスが加速しています。」</p>
                     <div class="mt-6">
-                        <p class="font-bold text白">M. Suzuki 様</p>
+                        <p class="font-bold text-white">M. Suzuki 様</p>
                         <p class="text-sm text-gray-400">コンテンツクリエイター</p>
                     </div>
                 </div>
@@ -216,7 +217,6 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
                         </ul>
                     </div>
-                    <!-- CHANGED: button calls startCheckout() instead of static link -->
                     <button onclick="startCheckout('https://buy.stripe.com/eVq9AV64d4k06wX6Io4Rq02')" class="mt-8 w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</button>
                 </div>
 
@@ -239,7 +239,6 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                    <!-- CHANGED -->
                     <button onclick="startCheckout('https://buy.stripe.com/00wfZj9gp6s8bRh7Ms4Rq03')" class="mt-8 w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</button>
                 </div>
 
@@ -272,7 +271,7 @@
                     データとAIの力で、SNS運用を新たなステージへ。今すぐその力を体験し、競合を置き去りにしましょう。
                 </p>
                 <div class="mt-8">
-                    <a href="#pricing" class="bg白 text-pink-600 font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105">
+                    <a href="#pricing" class="bg-white text-pink-600 font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105">
                         最適なプランでトライアルを開始
                     </a>
                 </div>
@@ -282,12 +281,12 @@
     <section id="faq" class="py-20 bg-gray-800/50">
         <div class="container mx-auto px-6 max-w-4xl">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text白">よくある質問</h3>
+                <h3 class="text-4xl font-bold text-white">よくある質問</h3>
             </div>
             <div class="space-y-4">
                 <details class="bg-gray-800 p-6 rounded-lg group">
                     <summary class="flex justify-between items-center cursor-pointer">
-                        <span class="text-lg font-semibold text白">無料トライアルはどのように機能しますか？</span>
+                        <span class="text-lg font-semibold text-white">無料トライアルはどのように機能しますか？</span>
                         <span class="arrow-down transition-transform transform text-pink-400">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
@@ -298,7 +297,7 @@
                 </details>
                 <details class="bg-gray-800 p-6 rounded-lg group">
                     <summary class="flex justify-between items-center cursor-pointer">
-                        <span class="text-lg font-semibold text白">利用開始までに何が必要ですか？</span>
+                        <span class="text-lg font-semibold text-white">利用開始までに何が必要ですか？</span>
                         <span class="arrow-down transition-transform transform text-pink-400">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
@@ -335,14 +334,32 @@
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
-        <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-white">ログイン</h2>
-                <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
+    <!-- NEW: Login/Sign Up Modal -->
+    <div id="auth-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
+        <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95 relative">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+
+            <!-- Tab Buttons -->
+            <div class="flex border-b border-gray-700 mb-6">
+                <button id="login-tab" class="flex-1 py-2 text-center font-semibold border-b-2 border-pink-500 text-white">ログイン</button>
+                <button id="signup-tab" class="flex-1 py-2 text-center font-semibold border-transparent text-gray-400 hover:text-white">新規登録</button>
             </div>
-            <form id="login-form" class="mt-6">
+
+            <h2 id="modal-title" class="text-2xl font-bold text-white text-center mb-6">ログイン</h2>
+
+            <!-- Google Sign In -->
+            <button id="google-signin-btn" class="w-full flex items-center justify-center py-3 px-4 border border-gray-600 rounded-md text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 mb-4">
+                <svg class="w-5 h-5 mr-2" viewBox="0 0 48 48"><defs><path id="a" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" fill="#FBBC05" d="M0 37V11l17 13z"/><path clip-path="url(#b)" fill="#EA4335" d="M0 11l17 13 7-6.1L48 14V0H0z"/><path clip-path="url(#b)" fill="#34A853" d="M0 37l30-23 7.9 1L48 0v48H0z"/><path clip-path="url(#b)" fill="#4285F4" d="M48 48L17 24l-4-3 35-10z"/></svg>
+                Googleで続行
+            </button>
+            <div class="relative flex py-4 items-center">
+                <div class="flex-grow border-t border-gray-700"></div>
+                <span class="flex-shrink mx-4 text-gray-400 text-xs">または</span>
+                <div class="flex-grow border-t border-gray-700"></div>
+            </div>
+
+            <!-- Email/Password Form -->
+            <form id="auth-form" novalidate>
                 <div id="error-message" class="hidden bg-red-900/50 border border-red-500 text-red-300 text-sm rounded-md p-3 mb-4"></div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300">メールアドレス</label>
@@ -353,11 +370,12 @@
                     <input type="password" name="password" id="password" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
                 </div>
                 <div class="mt-6">
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 rounded-md text-sm font-medium text-white bg-pink-600 hover:bg-pink-700">ログイン</button>
+                    <button id="form-submit-btn" type="submit" class="w-full flex justify-center py-3 px-4 rounded-md text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 disabled:opacity-50">ログイン</button>
                 </div>
             </form>
         </div>
     </div>
+
 
     <!-- Firebase SDK and Auth Logic -->
     <script type="module">
@@ -373,15 +391,7 @@
             GoogleAuthProvider,
             signOut
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        // MODIFIED: Import Firestore functions to check for subscriptions (kept as-is if you still use the Stripe Extension)
-        import {
-            getFirestore,
-            collection,
-            query,
-            where,
-            getDocs
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+        
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
@@ -396,146 +406,174 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
         // --- DOM Elements ---
-        const loginModal = document.getElementById('login-modal');
-        const loginBtn = document.getElementById('login-btn');
+        const authModal = document.getElementById('auth-modal');
         const closeModalBtn = document.getElementById('close-modal-btn');
-        const modalContent = loginModal.querySelector('div');
-        const loginForm = document.getElementById('login-form');
+        const modalContent = authModal.querySelector('div');
         const authButtonsContainer = document.getElementById('auth-buttons');
+        const loginTab = document.getElementById('login-tab');
+        const signupTab = document.getElementById('signup-tab');
+        const modalTitle = document.getElementById('modal-title');
+        const googleSigninBtn = document.getElementById('google-signin-btn');
+        const authForm = document.getElementById('auth-form');
+        const formSubmitBtn = document.getElementById('form-submit-btn');
         const errorMessageDiv = document.getElementById('error-message');
 
-        // --- Modal Logic ---
-        const openModal = () => {
-            loginModal.classList.remove('hidden');
+        // --- State ---
+        let authMode = 'login'; // 'login' or 'signup'
+        let postLoginAction = null;
+
+        // --- Modal UI Logic ---
+        const updateModalUI = () => {
+            if (authMode === 'login') {
+                modalTitle.textContent = 'ログイン';
+                formSubmitBtn.textContent = 'ログイン';
+                loginTab.classList.add('border-pink-500', 'text-white');
+                loginTab.classList.remove('border-transparent', 'text-gray-400');
+                signupTab.classList.add('border-transparent', 'text-gray-400');
+                signupTab.classList.remove('border-pink-500', 'text-white');
+            } else { // signup
+                modalTitle.textContent = '新規アカウント作成';
+                formSubmitBtn.textContent = 'アカウントを作成';
+                signupTab.classList.add('border-pink-500', 'text-white');
+                signupTab.classList.remove('border-transparent', 'text-gray-400');
+                loginTab.classList.add('border-transparent', 'text-gray-400');
+                loginTab.classList.remove('border-pink-500', 'text-white');
+            }
+        };
+
+        const openModal = (mode = 'login') => {
+            authMode = mode;
+            updateModalUI();
+            authForm.reset();
+            errorMessageDiv.classList.add('hidden');
+            authModal.classList.remove('hidden');
             setTimeout(() => {
-                loginModal.classList.remove('opacity-0');
+                authModal.classList.remove('opacity-0');
                 modalContent.classList.remove('scale-95');
             }, 10);
         };
+
         const closeModal = () => {
-            errorMessageDiv.classList.add('hidden');
-            loginModal.classList.add('opacity-0');
+            authModal.classList.add('opacity-0');
             modalContent.classList.add('scale-95');
             setTimeout(() => {
-                loginModal.classList.add('hidden');
+                authModal.classList.add('hidden');
             }, 300);
         };
-        loginBtn?.addEventListener('click', openModal);
+        
+        // --- Event Listeners for Modal ---
+        loginTab.addEventListener('click', () => { authMode = 'login'; updateModalUI(); });
+        signupTab.addEventListener('click', () => { authMode = 'signup'; updateModalUI(); });
         closeModalBtn.addEventListener('click', closeModal);
-        loginModal.addEventListener('click', (e) => { if (e.target === loginModal) closeModal(); });
+        authModal.addEventListener('click', (e) => { if (e.target === authModal) closeModal(); });
 
-        // --- Auth helpers ---
+        // --- Auth Logic ---
         const showAuthError = (message) => {
             errorMessageDiv.textContent = message;
             errorMessageDiv.classList.remove('hidden');
         };
 
-        // Signup (create account beforehand)
-        async function signUp(email, password) {
-            await createUserWithEmailAndPassword(auth, email, password);
-        }
-
-        // Check active subscription in Firestore (only relevant if you keep Stripe Extension)
-        const checkActiveSubscription = async (user) => {
-            if (!user) return false;
-            try {
-                const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
-                const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
-                const snap = await getDocs(q);
-                return !snap.empty;
-            } catch (e) {
-                console.error("Subscription check failed:", e);
-                return false;
+        const getFriendlyErrorMessage = (error) => {
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    return '有効なメールアドレスを入力してください。';
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                case 'auth/invalid-credential':
+                    return 'メールアドレスまたはパスワードが正しくありません。';
+                case 'auth/email-already-in-use':
+                    return 'このメールアドレスは既に使用されています。';
+                case 'auth/weak-password':
+                    return 'パスワードは6文字以上で設定してください。';
+                default:
+                    return 'エラーが発生しました。しばらくしてからもう一度お試しください。';
             }
         };
 
-        // Handle login form
-        loginForm.addEventListener('submit', async (e) => {
+        authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = loginForm.email.value;
-            const password = loginForm.password.value;
+            const email = authForm.email.value;
+            const password = authForm.password.value;
+            formSubmitBtn.disabled = true;
+            formSubmitBtn.textContent = '処理中...';
+
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                closeModal();
-            } catch (err) {
-                // If no account, create one (account beforehand)
-                if (err?.code === 'auth/invalid-credential' || err?.code === 'auth/user-not-found') {
-                    try {
-                        await signUp(email, password);
-                        closeModal();
-                    } catch (e2) {
-                        showAuthError("登録に失敗しました: " + (e2?.message || ''));
-                    }
+                if (authMode === 'login') {
+                    await signInWithEmailAndPassword(auth, email, password);
                 } else {
-                    showAuthError("ログインに失敗しました。");
+                    await createUserWithEmailAndPassword(auth, email, password);
                 }
+                closeModal();
+            } catch (error) {
+                showAuthError(getFriendlyErrorMessage(error));
+            } finally {
+                formSubmitBtn.disabled = false;
+                updateModalUI();
             }
         });
 
-        // Simple Google login (optional)
-        // document.getElementById('google-login-btn')?.addEventListener('click', async () => {
-        //   try { const r = await signInWithPopup(auth, googleProvider); closeModal(); }
-        //   catch { showAuthError("Googleでのログインに失敗しました。"); }
-        // });
+        googleSigninBtn.addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                closeModal();
+            } catch (error) {
+                console.error("Google sign in failed:", error);
+                showAuthError("Googleでのログイン/登録に失敗しました。");
+            }
+        });
 
-        // Header buttons update
-        const handleLogout = () => signOut(auth).catch((e)=>console.error('Sign out error', e));
-        onAuthStateChanged(auth, async (user) => {
+        // --- Header UI and Auth State Change ---
+        const handleLogout = () => signOut(auth).catch((e) => console.error('Sign out error', e));
+
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                const isActive = await checkActiveSubscription(user); // if you’re not using the Stripe extension, you can ignore this result
                 authButtonsContainer.innerHTML = `
                     <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
-                    <button id="logout-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                    <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
                 `;
                 document.getElementById('logout-btn').addEventListener('click', handleLogout);
+
+                if (typeof postLoginAction === 'function') {
+                    postLoginAction();
+                    postLoginAction = null;
+                }
             } else {
                 authButtonsContainer.innerHTML = `
-                    <button id="login-btn-dynamic" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
+                    <button id="signup-btn-header" class="text-white hover:text-pink-400 font-medium transition-colors">新規登録</button>
+                    <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
                 `;
-                document.getElementById('login-btn-dynamic').addEventListener('click', openModal);
+                document.getElementById('login-btn-header').addEventListener('click', () => openModal('login'));
+                document.getElementById('signup-btn-header').addEventListener('click', () => openModal('signup'));
             }
         });
 
-        // --- NEW: Login-first checkout helper ---
-        window.startCheckout = async function(baseUrl) {
+        // --- Checkout Logic ---
+        window.startCheckout = function(baseUrl) {
             const user = auth.currentUser;
-            if (!user) {
-                openModal(); // ask to login / create account first
-                return;
+            if (user) {
+                const url = new URL(baseUrl);
+                url.searchParams.set('client_reference_id', user.uid);
+                if (user.email) url.searchParams.set('prefilled_email', user.email);
+
+                const affiliateId = localStorage.getItem('affiliateRef');
+                if (affiliateId) url.searchParams.set('a', affiliateId);
+
+                window.location.href = url.toString();
+            } else {
+                postLoginAction = () => window.startCheckout(baseUrl);
+                openModal('signup');
             }
-            // Build Payment Link with UID + Email (keeps affiliate id separately)
-            const url = new URL(baseUrl);
-            url.searchParams.set('client_reference_id', user.uid);
-            if (user.email) url.searchParams.set('prefilled_email', user.email);
-
-            const affiliateId = localStorage.getItem('affiliateRef');
-            if (affiliateId) url.searchParams.set('a', affiliateId); // do NOT touch client_reference_id
-
-            window.location.href = url.toString();
         };
 
-        // --- Affiliate Tracking Logic (safe: does NOT overwrite client_reference_id) ---
+        // --- Affiliate Tracking Logic ---
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const affiliateId = urlParams.get('ref');
             if (affiliateId) {
                 localStorage.setItem('affiliateRef', affiliateId);
-            }
-            const storedAffiliateId = localStorage.getItem('affiliateRef');
-            if (storedAffiliateId) {
-                const stripeLinks = document.querySelectorAll('a[href*="checkout.stripe.com"], a[href*="buy.stripe.com"]');
-                stripeLinks.forEach(link => {
-                    try {
-                        const u = new URL(link.href);
-                        // leave client_reference_id for startCheckout()
-                        u.searchParams.set('a', storedAffiliateId);
-                        link.href = u.toString();
-                    } catch (_) {}
-                });
             }
         });
     </script>
