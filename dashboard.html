@@ -1,197 +1,119 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Viral Reel Automator - Dashboard</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ダッシュボード - ViralReel Automator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-      body {
-        background-color: #0f172a;
-        color: #f1f5f9;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans JP", sans-serif;
-        padding: 32px;
-        margin: 0;
-      }
-
-      h1 {
-        font-size: 28px;
-        font-weight: 800;
-        margin-bottom: 24px;
-      }
-
-      label {
-        display: block;
-        margin: 16px 0 8px;
-      }
-
-      input[type="text"],
-      input[type="number"] {
-        width: 100%;
-        max-width: 480px;
-        padding: 10px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        margin-bottom: 12px;
-      }
-
-      button {
-        background-color: #ec4899;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: 12px;
-      }
-
-      #result {
-        margin-top: 40px;
-      }
-
-      .video-card {
-        background: #1e293b;
-        padding: 16px;
-        border-radius: 12px;
-        margin-bottom: 16px;
-      }
-
-      .video-card p {
-        margin: 4px 0;
-      }
-
-      a.download-link {
-        display: inline-block;
-        margin-top: 8px;
-        color: #93c5fd;
-        text-decoration: underline;
-      }
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
     </style>
-  </head>
+</head>
+<body class="bg-gray-900 text-gray-200">
 
-  <body>
-    <h1>🎬 Viral Reel Automator Dashboard</h1>
-
-    <div id="userInfo">ログイン状態を確認中...</div>
-
-    <div id="mainApp" style="display:none;">
-      <label>キーワードでアカウントを探す</label>
-      <input type="text" id="keyword" placeholder="例: memes, fitness, cat" />
-
-      <button onclick="sendKeyword()">🔍 リサーチ開始</button>
-
-      <label>スクレイピングするアカウントをカンマ区切りで入力</label>
-      <input type="text" id="accounts" placeholder="例: memezone, dailyfunnyclips" />
-
-      <label>スクレイプする動画数（最大10）</label>
-      <input type="number" id="limit" min="1" max="10" value="5" />
-
-      <button onclick="scrapeVideos()">📥 動画を取得する</button>
-
-      <div id="result"></div>
+    <!-- Loading State -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+        <div class="text-center">
+            <svg class="animate-spin h-8 w-8 text-pink-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="mt-4 text-gray-400">認証情報を確認中...</p>
+        </div>
     </div>
 
+    <!-- Main Content (hidden until authorized) -->
+    <div id="dashboard-content" class="hidden">
+        <header class="bg-gray-800/80 backdrop-blur-sm shadow-lg">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <h1 class="text-xl font-bold text-white">ダッシュボード</h1>
+                <div>
+                     <span id="user-email" class="text-gray-400 mr-4"></span>
+                     <button id="logout-btn-dash" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-lg text-sm">ログアウト</button>
+                </div>
+            </div>
+        </header>
+        <main class="container mx-auto px-6 py-12">
+            <h2 class="text-3xl font-bold text-white">ようこそ！</h2>
+            <p class="mt-2 text-gray-400">こちらがあなたのコンテンツ管理画面です。</p>
+            <!-- Your main application functionality will go here -->
+            <div class="mt-8 p-8 bg-gray-800 rounded-lg border border-gray-700">
+                <h3 class="text-lg font-semibold">今後の開発エリア</h3>
+                <p class="text-gray-400 mt-2">ここにリサーチ機能やコンテンツ生成テーブルなどのアプリケーション機能が実装されます。</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK and Auth Guard Logic -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-      import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
-        authDomain: "viral-reel-automator.firebaseapp.com",
-        projectId: "viral-reel-automator",
-        storageBucket: "viral-reel-automator.appspot.com",
-        messagingSenderId: "149388169567",
-        appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
-        measurementId: "G-8N6L9GDKNC"
-      };
+        // IMPORTANT: Use the exact same Firebase config as in index.html
+        const firebaseConfig = {
+            apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
+            authDomain: "viral-reel-automator.firebaseapp.com",
+            projectId: "viral-reel-automator",
+            storageBucket: "viral-reel-automator.appspot.com",
+            messagingSenderId: "149388169567",
+            appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
+            measurementId: "G-8N6L9GDKNC"
+        };
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "/";
-          return;
-        }
+        // --- DOM Elements ---
+        const loader = document.getElementById('loader');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const userEmailSpan = document.getElementById('user-email');
+        const logoutBtnDash = document.getElementById('logout-btn-dash');
 
-        const uid = user.uid;
-        const subCol = collection(db, "customers", uid, "subscriptions");
-        const subSnap = await getDocs(subCol);
-        let hasActivePlan = false;
+        // --- Subscription Check Function (same as on index.html) ---
+        const checkActiveSubscription = async (user) => {
+            if (!user) return false;
+            try {
+                const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
+                const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
+                const querySnapshot = await getDocs(q);
+                return !querySnapshot.empty;
+            } catch (e) {
+                console.error("Subscription check failed:", e);
+                return false;
+            }
+        };
+
+        // --- This is the "Auth Guard" for the page ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is logged in, now check for subscription
+                const isActive = await checkActiveSubscription(user);
+                if (isActive) {
+                    // SUCCESS: User is authenticated and has an active subscription. Show the dashboard.
+                    userEmailSpan.textContent = user.email;
+                    loader.classList.add('hidden');
+                    dashboardContent.classList.remove('hidden');
+                } else {
+                    // FAILURE: User is authenticated but has NO subscription. Redirect to pricing.
+                    window.location.replace('/index.html#pricing');
+                }
+            } else {
+                // FAILURE: User is not authenticated. Redirect to home page to log in.
+                window.location.replace('/index.html');
+            }
+        });
         
-        subSnap.forEach((doc) => {
-          const sub = doc.data();
-          if (["active", "trialing"].includes(sub.status)) {
-            hasActivePlan = true;
-          }
+        logoutBtnDash.addEventListener('click', () => {
+            signOut(auth).catch((error) => {
+                console.error('Sign out error', error);
+            });
+            // onAuthStateChanged will handle the redirect automatically after sign out
         });
-
-
-        if (!hasActivePlan) {
-          window.location.href = "/pricing.html";
-          return;
-        }
-
-        document.getElementById("userInfo").innerText = `ログイン中: ${user.email}`;
-        document.getElementById("mainApp").style.display = "block";
-      });
-
-      async function sendKeyword() {
-        const keyword = document.getElementById("keyword").value.trim();
-        if (!keyword) return alert("キーワードを入力してください");
-
-        const res = await fetch("https://hook.us1.make.com/xxxx", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ keyword })
-        });
-
-        if (!res.ok) return alert("エラーが発生しました");
-        alert("リサーチを開始しました。数分後にアカウントが表示されます。");
-      }
-
-      async function scrapeVideos() {
-        const accounts = document.getElementById("accounts").value.trim();
-        const limit = parseInt(document.getElementById("limit").value);
-
-        if (!accounts || isNaN(limit)) {
-          return alert("全ての項目を入力してください");
-        }
-
-        const res = await fetch("https://hook.us1.make.com/yyyy", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ accounts, limit })
-        });
-
-        if (!res.ok) return alert("スクレイプに失敗しました");
-
-        const data = await res.json();
-        displayResults(data);
-      }
-
-      function displayResults(data) {
-        const container = document.getElementById("result");
-        container.innerHTML = "";
-
-        data.videos.forEach(video => {
-          const card = document.createElement("div");
-          card.className = "video-card";
-
-          card.innerHTML = `
-            <p><strong>タイトル:</strong> ${video.title}</p>
-            <p><strong>再生数:</strong> ${video.views}</p>
-            <p><strong>投稿日:</strong> ${video.date}</p>
-            <a class="download-link" href="${video.downloadUrl}" download>⬇️ ダウンロード</a>
-          `;
-
-          container.appendChild(card);
-        });
-      }
     </script>
-  </body>
+
+</body>
 </html>
