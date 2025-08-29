@@ -52,7 +52,6 @@
                 <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
                 <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
             </nav>
-            <!-- MODIFIED: UI is now controlled by auth state, only showing Login or Dashboard -->
             <div id="auth-buttons" class="flex items-center space-x-4">
                 <button id="login-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
             </div>
@@ -74,6 +73,7 @@
             </a>
         </div>
     </main>
+
 
     <!-- Sections: How It Works, Who is this for, Features, Testimonials, Pricing, CTA, FAQ, Disclaimer -->
     <section id="how-it-works" class="py-20 bg-gray-800/50">
@@ -320,7 +320,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+        <!-- Footer -->
     <footer class="bg-gray-900 border-t border-gray-700">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
             <a href="tokushoho.html" class="hover:text-pink-400 transition-colors mb-4 block">特定商取引法に基づく表記</a>
@@ -333,150 +333,57 @@
     <div id="login-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
         <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-white">ログイン</h2>
+                <h2 class="text-2xl font-bold text-white">ログイン / アカウント作成</h2>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
             </div>
             <form id="login-form" class="mt-6">
                 <div id="error-message" class="hidden bg-red-900/50 border border-red-500 text-red-300 text-sm rounded-md p-3 mb-4"></div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300">メールアドレス</label>
-                    <input type="email" name="email" id="email" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                    <input type="email" name="email" id="email" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
                 </div>
                 <div class="mt-4">
                     <label for="password" class="block text-sm font-medium text-gray-300">パスワード</label>
-                    <input type="password" name="password" id="password" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                    <input type="password" name="password" id="password" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
                 </div>
-                <div class="mt-6">
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                        ログイン
-                    </button>
+                <div class="mt-6 flex gap-2">
+                    <button type="submit" class="w-1/2 py-3 rounded-md bg-pink-600 text-white">ログイン</button>
+                    <button type="button" id="signup-btn" class="w-1/2 py-3 rounded-md bg-orange-600 text-white">新規作成</button>
                 </div>
             </form>
-            <div class="mt-6 relative">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-gray-600"></div>
-                </div>
-                <div class="relative flex justify-center text-sm">
-                    <span class="px-2 bg-gray-800 text-gray-400">または</span>
-                </div>
-            </div>
-            <div class="mt-6">
-                <button id="google-login-btn" class="w-full inline-flex justify-center py-3 px-4 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-sm font-medium text-white hover:bg-gray-600">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    Googleでログイン
-                </button>
-            </div>
         </div>
     </div>
 
     <!-- Firebase SDK and Auth Logic -->
     <script type="module">
-        // Import Firebase core functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        // Import Firebase Auth functions
-        import { 
-            getAuth, 
-            onAuthStateChanged, 
-            signInWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        // MODIFIED: Import Firestore functions to check for subscriptions
-        import { 
-            getFirestore,
-            collection,
-            query,
-            where,
-            getDocs
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
+            apiKey: "YOUR_KEY",
             authDomain: "viral-reel-automator.firebaseapp.com",
             projectId: "viral-reel-automator",
-            storageBucket: "viral-reel-automator.appspot.com",
-            messagingSenderId: "149388169567",
-            appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
-            measurementId: "G-8N6L9GDKNC"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app); // Initialize Firestore
-        const googleProvider = new GoogleAuthProvider();
 
-        // --- DOM Elements ---
         const loginModal = document.getElementById('login-modal');
         const loginBtn = document.getElementById('login-btn');
         const closeModalBtn = document.getElementById('close-modal-btn');
-        const modalContent = loginModal.querySelector('div');
         const loginForm = document.getElementById('login-form');
-        const googleLoginBtn = document.getElementById('google-login-btn');
-        const authButtonsContainer = document.getElementById('auth-buttons');
+        const signupBtn = document.getElementById('signup-btn');
         const errorMessageDiv = document.getElementById('error-message');
+        const authButtonsContainer = document.getElementById('auth-buttons');
 
-        // --- Modal Logic ---
-        const openModal = () => {
-            loginModal.classList.remove('hidden');
-            setTimeout(() => {
-                loginModal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95');
-            }, 10);
-        };
-
-        const closeModal = () => {
-            errorMessageDiv.classList.add('hidden');
-            loginModal.classList.add('opacity-0');
-            modalContent.classList.add('scale-95');
-            setTimeout(() => {
-                loginModal.classList.add('hidden');
-            }, 300);
-        };
-        
+        const openModal = () => loginModal.classList.remove('hidden');
+        const closeModal = () => loginModal.classList.add('hidden');
+        loginBtn.addEventListener('click', openModal);
         closeModalBtn.addEventListener('click', closeModal);
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) closeModal();
-        });
 
-        // --- Authentication Logic ---
-        const showAuthError = (message) => {
-            errorMessageDiv.textContent = message;
+        const showError = (msg) => {
+            errorMessageDiv.textContent = msg;
             errorMessageDiv.classList.remove('hidden');
-        };
-
-        // MODIFIED: Function to check for an active Stripe subscription
-        const checkActiveSubscription = async (user) => {
-            if (!user) return false;
-            try {
-                const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
-                const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
-                const querySnapshot = await getDocs(q);
-                return !querySnapshot.empty; // Returns true if any active/trialing subscription is found
-            } catch (error) {
-                console.error("Subscription check failed:", error);
-                return false; // Failsafe
-            }
-        };
-
-        const handleLoginSuccess = async (user) => {
-            const isActive = await checkActiveSubscription(user);
-            if (isActive) {
-                console.log("Active subscription found. Access granted.");
-                closeModal();
-                window.location.href = '/dashboard.html'; // Redirect to dashboard
-            } else {
-                console.log("No active subscription found.");
-                showAuthError("有効なプランが見つかりません。プランをご購入ください。");
-                await signOut(auth); // Log out the user if they don't have a subscription
-            }
         };
 
         loginForm.addEventListener('submit', async (e) => {
@@ -484,70 +391,36 @@
             const email = loginForm.email.value;
             const password = loginForm.password.value;
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                await handleLoginSuccess(userCredential.user);
-            } catch (error) {
-                console.error("Login Error:", error.code, error.message);
-                let message = "ログインに失敗しました。";
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    message = "メールアドレスまたはパスワードが間違っています。";
-                }
-                showAuthError(message);
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = '/dashboard.html';
+            } catch (err) {
+                showError("ログイン失敗: " + err.message);
             }
         });
 
-        googleLoginBtn.addEventListener('click', async () => {
+        signupBtn.addEventListener('click', async () => {
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
             try {
-                const result = await signInWithPopup(auth, googleProvider);
-                await handleLoginSuccess(result.user);
-            } catch (error) {
-                console.error("Google Login Error:", error.code, error.message);
-                showAuthError("Googleでのログインに失敗しました。");
+                await createUserWithEmailAndPassword(auth, email, password);
+                window.location.href = '/dashboard.html';
+            } catch (err) {
+                showError("登録失敗: " + err.message);
             }
         });
 
-        const handleLogout = () => {
-            signOut(auth).catch((error) => console.error('Sign out error', error));
-        };
-        
-        onAuthStateChanged(auth, async (user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                const isActive = await checkActiveSubscription(user);
-                if (isActive) {
-                    // User is signed in AND has an active subscription
-                    authButtonsContainer.innerHTML = `
-                        <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
-                        <button id="logout-btn" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
-                    `;
-                    document.getElementById('logout-btn').addEventListener('click', handleLogout);
-                } else {
-                    // User is signed in but has NO active subscription, log them out
-                    await signOut(auth);
-                }
-            } else {
-                // User is signed out
                 authButtonsContainer.innerHTML = `
-                    <button id="login-btn-dynamic" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
+                    <a href="/dashboard.html" class="text-white">ダッシュボード</a>
+                    <button id="logout-btn" class="bg-pink-600 px-4 py-2 rounded">ログアウト</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+            } else {
+                authButtonsContainer.innerHTML = `
+                    <button id="login-btn-dynamic" class="bg-pink-600 px-4 py-2 rounded">ログイン</button>
                 `;
                 document.getElementById('login-btn-dynamic').addEventListener('click', openModal);
-            }
-        });
-
-        // --- Affiliate Tracking Logic ---
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const affiliateId = urlParams.get('ref'); 
-            if (affiliateId) {
-                localStorage.setItem('affiliateRef', affiliateId);
-            }
-            const storedAffiliateId = localStorage.getItem('affiliateRef');
-            if (storedAffiliateId) {
-                const stripeLinks = document.querySelectorAll('a[href*="checkout.stripe.com"], a[href*="buy.stripe.com"]');
-                stripeLinks.forEach(link => {
-                    const originalUrl = link.href;
-                    const newUrl = originalUrl + `?client_reference_id=${storedAffiliateId}`;
-                    link.href = newUrl;
-                });
             }
         });
     </script>
