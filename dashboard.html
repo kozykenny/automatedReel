@@ -1,559 +1,197 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViralReel Automator - AIコンテンツ戦略プラットフォーム</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <!-- Stripe.js script -->
-    <script src="https://js.stripe.com/v3/"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Viral Reel Automator - Dashboard</title>
     <style>
-        body {
-            font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        }
-        .gradient-text {
-            background: linear-gradient(90deg, #F97316, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .glow-shadow {
-            box-shadow: 0 0 40px 0 rgba(236, 72, 153, 0.4);
-        }
-        .hover-lift {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        details > summary {
-            list-style: none;
-        }
-        details > summary::-webkit-details-marker {
-            display: none;
-        }
-        details[open] summary .arrow-down {
-            transform: rotate(180deg);
-        }
-        .modal-backdrop {
-            transition: opacity 0.3s ease;
-        }
+      body {
+        background-color: #0f172a;
+        color: #f1f5f9;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans JP", sans-serif;
+        padding: 32px;
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 24px;
+      }
+
+      label {
+        display: block;
+        margin: 16px 0 8px;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        max-width: 480px;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+
+      button {
+        background-color: #ec4899;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 12px;
+      }
+
+      #result {
+        margin-top: 40px;
+      }
+
+      .video-card {
+        background: #1e293b;
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+
+      .video-card p {
+        margin: 4px 0;
+      }
+
+      a.download-link {
+        display: inline-block;
+        margin-top: 8px;
+        color: #93c5fd;
+        text-decoration: underline;
+      }
     </style>
-</head>
-<body class="bg-gray-900 text-gray-200">
+  </head>
 
-    <!-- Header -->
-    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-tight gradient-text">ViralReel Automator</h1>
-            <nav class="hidden md:flex space-x-8 items-center">
-                <a href="#how-it-works" class="hover:text-pink-400 transition-colors">仕組み</a>
-                <a href="#features" class="hover:text-pink-400 transition-colors">機能詳細</a>
-                <a href="#testimonials" class="hover:text-pink-400 transition-colors">お客様の声</a>
-                <a href="#pricing" class="hover:text-pink-400 transition-colors">料金プラン</a>
-                <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
-            </nav>
-            <div id="auth-buttons" class="flex items-center space-x-4">
-                <!-- Auth buttons will be populated here by script -->
-            </div>
-        </div>
-    </header>
+  <body>
+    <h1>🎬 Viral Reel Automator Dashboard</h1>
 
-    <!-- Hero Section -->
-    <main class="container mx-auto px-6 py-24 text-center">
-        <h2 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">
-            面倒なSNS運用を、<br class="hidden md:block" />
-            <span class="gradient-text">AIに丸投げしませんか？</span>
-        </h2>
-        <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-            AIが競合リサーチから「バズる」コンテンツの生成までを全自動化。あなたは完成した投稿候補をダッシュボードで確認するだけです。
-        </p>
-        <div class="mt-10">
-            <a href="#pricing" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105 glow-shadow">
-                14日間の無料トライアルを開始
-            </a>
-        </div>
-    </main>
+    <div id="userInfo">ログイン状態を確認中...</div>
 
-    <!-- Sections: How It Works, Who is this for, Features, Testimonials, Pricing, CTA, FAQ, Disclaimer -->
-    <section id="how-it-works" class="py-20 bg-gray-800/50">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">データドリブンなコンテンツ制作フロー</h3>
-                <p class="text-gray-400 mt-2">リサーチからコンテンツ完成まで、全てがシームレスに繋がります。</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-10 text-center">
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
-                    <div class="text-5xl mb-4">📊</div>
-                    <h4 class="text-2xl font-semibold text-white">1. リサーチ & 分析</h4>
-                    <p class="text-gray-400 mt-2">キーワードを入力するだけで、関連性の高い人気アカウントを瞬時にリストアップ。パフォーマンスデータを分析し、最適なターゲットを選定します。</p>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
-                    <div class="text-5xl mb-4">✨</div>
-                    <h4 class="text-2xl font-semibold text-white">2. AIで再創造</h4>
-                    <p class="text-gray-400 mt-2">独自開発の言語モデルが最適なキャプションを生成。最先端の映像エンジンが、動画を唯一無二のオリジナルコンテンツへと昇華させます。</p>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
-                    <div class="text-5xl mb-4">📋</div>
-                    <h4 class="text-2xl font-semibold text-white">3. コンテンツ管理</h4>
-                    <p class="text-gray-400 mt-2">生成された動画とキャプションは、管理画面のテーブルに自動で整理・保存。いつでも好きな時にダウンロードし、投稿できます。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="who-is-this-for" class="py-20">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">こんな方におすすめです</h3>
-                <p class="text-gray-400 mt-2">あなたのビジネスを次のレベルへ。</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
-                    <div class="text-5xl mb-4">💰</div>
-                    <h4 class="text-2xl font-semibold text-white">アフィリエイトマーケター</h4>
-                    <p class="text-gray-400 mt-2">複数のアカウントを効率的に運用し、収益化までの時間を大幅に短縮したい方。</p>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
-                    <div class="text-5xl mb-4">😂</div>
-                    <h4 class="text-2xl font-semibold text-white">ミーム・まとめ系アカウント</h4>
-                    <p class="text-gray-400 mt-2">コンテンツを探し、編集する手間を省き、投稿の頻度と質を劇的に向上させたい方。</p>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
-                    <div class="text-5xl mb-4">⚡</div>
-                    <h4 class="text-2xl font-semibold text-white">グロースハッカー</h4>
-                    <p class="text-gray-400 mt-2">最新のAIツールを活用して、最速でアカウントを成長させるための新しい戦略を試したい方。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="features" class="py-20 bg-gray-800/50">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">ライバルに差をつける、圧倒的な機能</h3>
-                <p class="text-gray-400 mt-2">あなたのコンテンツ戦略を、次の次元へ。</p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold text-white">📈 競合リサーチ機能</h4>
-                    <p class="text-gray-400 mt-2">「裏垢」「グルメ」などのキーワードで市場を分析。有望なベンチマークアカウントをデータに基づき発見し、成功のヒントを掴みます。</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold text-white">🖥️ 直感的なWebダッシュボード</h4>
-                    <p class="text-gray-400 mt-2">リサーチからコンテンツ管理、ダウンロードまで全ての操作がブラウザ上で完結。複雑な設定は一切不要です。</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold text-white">✍️ 独自開発AIライティング</h4>
-                    <p class="text-gray-400 mt-2">数百万の「バズる」コンテンツを学習した専用言語モデルが、人の心を動かすキャプションとハッシュタグを自動生成します。</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold text-white">🎬 プロ級ビデオエンジン</h4>
-                    <p class="text-gray-400 mt-2">コンテンツの魅力を最大限に引き出す、高度な映像処理エンジンを搭載。ウォーターマーク追加なども自由自在です。</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold text-white">🗂️ コンテンツ管理テーブル</h4>
-                    <p class="text-gray-400 mt-2">生成された全てのコンテンツを一元管理。パフォーマンスデータと紐付けて、効果測定や次の戦略立案に活用できます。</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold text-white">🛡️ 高度な重複コンテンツ防止</h4>
-                    <p class="text-gray-400 mt-2">独自のデータベースシステムにより、同じコンテンツを誤って再利用する心配はありません。常に新鮮な投稿を維持します。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="testimonials" class="py-20">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">お客様の声</h3>
-                <p class="text-gray-400 mt-2">すでに多くの方が結果を出しています。</p>
-            </div>
-            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
-                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
-                    <p class="text-gray-300">「トライアルを試したら、3日で効果を実感。即契約しました。1ヶ月でフォロワーが3万人増え、今まで手作業でやっていたのが馬鹿らしくなりました。」</p>
-                    <div class="mt-6">
-                        <p class="font-bold text-white">K. Tanaka 様</p>
-                        <p class="text-sm text-gray-400">アフィリエイトマーケター</p>
-                    </div>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
-                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
-                    <p class="text-gray-300">「毎日3時間かかっていたコンテンツ作成の時間がゼロに。空いた時間で新しいアカウントの戦略を練ることができ、ビジネスが加速しています。」</p>
-                    <div class="mt-6">
-                        <p class="font-bold text-white">M. Suzuki 様</p>
-                        <p class="text-sm text-gray-400">コンテンツクリエイター</p>
-                    </div>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700">
-                    <div class="text-pink-400 text-2xl font-bold mb-4">★★★★★</div>
-                    <p class="text-gray-300">「技術的な知識が全くなくても、ダッシュボードが直感的で使いやすい。サポートも丁寧で、安心して任せられます。」</p>
-                    <div class="mt-6">
-                        <p class="font-bold text-white">A. Sato 様</p>
-                        <p class="text-sm text-gray-400">オンライン事業者</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section id="pricing" class="py-20 bg-gray-800/50">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">あなたに合ったプランを選びましょう</h3>
-            </div>
-            <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Starter -->
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
-                    <div class="flex-grow">
-                        <h4 class="text-2xl font-bold text-orange-400">Starter</h4>
-                        <p class="mt-4 text-gray-300">まずは始めたい個人・小規模アカウント向け</p>
-                        <div class="mt-6 text-4xl font-black text-white">
-                            ¥7,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
-                        </div>
-                        <p class="mt-2 text-sm text-gray-400">14日間のトライアル終了後</p>
-                        <ul class="mt-8 space-y-4 text-left">
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>リサーチ機能（基本）</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月100コンテンツ生成</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>1 ワークスペース</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
-                        </ul>
-                    </div>
-                    <!-- 修正点: 支払いリンクにIDを追加 -->
-                    <a id="starter-plan-link" href="https://buy.stripe.com/dRmdRb8cl5o48F54Ag4Rq04" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
-                </div>
+    <div id="mainApp" style="display:none;">
+      <label>キーワードでアカウントを探す</label>
+      <input type="text" id="keyword" placeholder="例: memes, fitness, cat" />
 
-                <!-- Pro -->
-                <div class="bg-gray-800 p-8 rounded-2xl border-2 border-pink-500 flex flex-col hover-lift relative transform lg:scale-105">
-                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
-                        <span class="bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">一番人気</span>
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="text-2xl font-bold text-pink-400">Pro</h4>
-                        <p class="mt-4 text-gray-300">本格的に収益化を目指すアフィリエイター向け</p>
-                        <div class="mt-6 text-4xl font-black text-white">
-                            ¥14,800 <span class="text-lg font-medium text-gray-400">/ 月</span>
-                        </div>
-                        <p class="mt-2 text-sm text-gray-400">14日間のトライアル終了後</p>
-                        <ul class="mt-8 space-y-4 text-left">
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>リサーチ機能（無制限）</strong></li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>月300コンテンツ生成</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>3</strong> ワークスペース</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
-                        </ul>
-                    </div>
-                     <!-- 修正点: 支払いリンクにIDを追加 -->
-                    <a id="pro-plan-link" href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
-                </div>
+      <button onclick="sendKeyword()">🔍 リサーチ開始</button>
 
-                <!-- Agency -->
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 flex flex-col hover-lift">
-                    <div class="flex-grow">
-                        <h4 class="text-2xl font-bold text-teal-400">Agency</h4>
-                        <p class="mt-4 text-gray-300">複数のクライアントを管理する代理店・法人向け</p>
-                        <div class="mt-6 text-4xl font-black text-white">
-                            要問い合わせ
-                        </div>
-                        <p class="mt-2 text-sm text-gray-400">トライアルについてもご相談ください</p>
-                        <ul class="mt-8 space-y-4 text-left">
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>全機能無制限</strong></li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>ワークスペース数 無制限</li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>専任担当者によるサポート</strong></li>
-                            <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>カスタムオンボーディング</li>
-                        </ul>
-                    </div>
-                    <a href="mailto:pepezar000@gmail.com" class="mt-8 block w-full bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">お問い合わせ</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="final-cta" class="py-20">
-        <div class="container mx-auto px-6 text-center">
-            <div class="bg-gradient-to-r from-orange-500 to-pink-600 p-12 rounded-2xl shadow-2xl">
-                <h3 class="text-4xl font-extrabold text-white">準備はできましたか？</h3>
-                <p class="mt-4 text-lg text-white/90 max-w-2xl mx-auto">
-                    データとAIの力で、SNS運用を新たなステージへ。今すぐその力を体験し、競合を置き去りにしましょう。
-                </p>
-                <div class="mt-8">
-                    <a href="#pricing" class="bg-white text-pink-600 font-bold py-4 px-10 rounded-lg text-lg transition-transform transform hover:scale-105">
-                        最適なプランでトライアルを開始
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="faq" class="py-20 bg-gray-800/50">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white">よくある質問</h3>
-            </div>
-            <div class="space-y-4">
-                <details class="bg-gray-800 p-6 rounded-lg group">
-                    <summary class="flex justify-between items-center cursor-pointer">
-                        <span class="text-lg font-semibold text-white">無料トライアルはどのように機能しますか？</span>
-                        <span class="arrow-down transition-transform transform text-pink-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 text-gray-400">
-                        トライアルを開始する際にクレジットカード情報の入力が必要ですが、最初の14日間は一切請求されません。トライアル期間が終了する前にキャンセルすれば、料金は発生しません。キャンセルしない場合、14日後に自動的に選択したプランの月額料金が課金されます。
-                    </p>
-                </details>
-                <details class="bg-gray-800 p-6 rounded-lg group">
-                    <summary class="flex justify-between items-center cursor-pointer">
-                        <span class="text-lg font-semibold text-white">利用開始までに何が必要ですか？</span>
-                        <span class="arrow-down transition-transform transform text-pink-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 text-gray-400">
-                        特別な準備は必要ありません。プランを選択してお支払い情報を登録後、すぐにダッシュボードへアクセスできます。ご不明な点があれば、Telegramのカスタマーサポートが迅速に対応します。
-                    </p>
-                </details>
-            </div>
-        </div>
-    </section>
-    <section id="disclaimer" class="py-16">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 text-center">
-                <h3 class="text-xl font-bold text-yellow-300">【重要】免責事項と利用上の注意</h3>
-                <div class="mt-4 text-left space-y-2 text-gray-400 text-xs">
-                   <p><strong>1. 著作権について:</strong> 他人が作成したコンテンツを許可なく再利用することは、著作権侵害にあたる可能性があります。本ツールの利用は、利用者自身の責任で行うものとします。</p>
-                   <p><strong>2. SNSの利用規約:</strong> データ収集や自動化ツールの使用は、各SNSの利用規約に違反する可能性があります。アカウントの凍結等のリスクが伴うことを理解した上で、自己の責任においてご利用ください。</p>
-                   <p><strong>3. 法的責任:</strong> 本ツールの利用によって生じたいかなる問題についても、当方は一切の責任を負いかねます。</p>
-                </div>
-                 <p class="mt-4 text-yellow-300 text-sm font-semibold">
-                    購入・利用を開始した時点で、上記すべての条項に同意したものとみなします。
-                </p>
-            </div>
-        </div>
-    </section>
+      <label>スクレイピングするアカウントをカンマ区切りで入力</label>
+      <input type="text" id="accounts" placeholder="例: memezone, dailyfunnyclips" />
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-700">
-        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
-            <a href="tokushoho.html" class="hover:text-pink-400 transition-colors mb-4 block">特定商取引法に基づく表記</a>
-            <p>&copy; 2025 ViralReel Automator. All Rights Reserved.</p>
-            <p class="text-sm mt-2">This tool is not affiliated with Instagram, Facebook, or Meta.</p>
-        </div>
-    </footer>
+      <label>スクレイプする動画数（最大10）</label>
+      <input type="number" id="limit" min="1" max="10" value="5" />
 
-    <!-- Login/Sign Up Modal -->
-    <div id="auth-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
-        <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95 relative">
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <div class="flex border-b border-gray-700 mb-6">
-                <button id="login-tab" class="flex-1 py-2 text-center font-semibold border-b-2 border-pink-500 text-white">ログイン</button>
-                <button id="signup-tab" class="flex-1 py-2 text-center font-semibold border-transparent text-gray-400 hover:text-white">新規登録</button>
-            </div>
-            <h2 id="modal-title" class="text-2xl font-bold text-white text-center mb-6">ログイン</h2>
-            <button id="google-signin-btn" class="w-full flex items-center justify-center py-3 px-4 border border-gray-600 rounded-md text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 mb-4">
-                <svg class="w-5 h-5 mr-2" viewBox="0 0 48 48"><defs><path id="a" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" fill="#FBBC05" d="M0 37V11l17 13z"/><path clip-path="url(#b)" fill="#EA4335" d="M0 11l17 13 7-6.1L48 14V0H0z"/><path clip-path="url(#b)" fill="#34A853" d="M0 37l30-23 7.9 1L48 0v48H0z"/><path clip-path="url(#b)" fill="#4285F4" d="M48 48L17 24l-4-3 35-10z"/></svg>
-                Googleで続行
-            </button>
-            <div class="relative flex py-4 items-center">
-                <div class="flex-grow border-t border-gray-700"></div>
-                <span class="flex-shrink mx-4 text-gray-400 text-xs">または</span>
-                <div class="flex-grow border-t border-gray-700"></div>
-            </div>
-            <form id="auth-form" novalidate>
-                <div id="error-message" class="hidden bg-red-900/50 border border-red-500 text-red-300 text-sm rounded-md p-3 mb-4"></div>
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-300">メールアドレス</label>
-                    <input type="email" name="email" id="email" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
-                </div>
-                <div class="mt-4">
-                    <label for="password" class="block text-sm font-medium text-gray-300">パスワード</label>
-                    <input type="password" name="password" id="password" required class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500">
-                </div>
-                <div class="mt-6">
-                    <button id="form-submit-btn" type="submit" class="w-full flex justify-center py-3 px-4 rounded-md text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 disabled:opacity-50">ログイン</button>
-                </div>
-            </form>
-        </div>
+      <button onclick="scrapeVideos()">📥 動画を取得する</button>
+
+      <div id="result"></div>
     </div>
 
-    <!-- Firebase SDK and Auth Logic -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
+        authDomain: "viral-reel-automator.firebaseapp.com",
+        projectId: "viral-reel-automator",
+        storageBucket: "viral-reel-automator.appspot.com",
+        messagingSenderId: "149388169567",
+        appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
+        measurementId: "G-8N6L9GDKNC"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "/";
+          return;
+        }
+
+        const uid = user.uid;
+        const subCol = collection(db, "customers", uid, "subscriptions");
+        const subSnap = await getDocs(subCol);
+        let hasActivePlan = false;
         
-        const firebaseConfig = {
-            apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
-            authDomain: "viral-reel-automator.firebaseapp.com",
-            projectId: "viral-reel-automator",
-            storageBucket: "viral-reel-automator.appspot.com",
-            messagingSenderId: "149388169567",
-            appId: "1:149388169567:web:0dfe6f214d09d5c9c9a6ea",
-            measurementId: "G-8N6L9GDKNC"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const googleProvider = new GoogleAuthProvider();
-        
-        const stripe = Stripe('pk_live_51RoSthRtKpbVaYC51dOkn5S7li3zWB8TfJhAi44WarEcx2JPhZMXd6UzXNwN745AmZ7dc3OlVRZUnnZSqPkLIiit003ychhrka');
-
-        // --- DOM Elements ---
-        const authModal = document.getElementById('auth-modal');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        const modalContent = authModal.querySelector('div');
-        const authButtonsContainer = document.getElementById('auth-buttons');
-        const loginTab = document.getElementById('login-tab');
-        const signupTab = document.getElementById('signup-tab');
-        const modalTitle = document.getElementById('modal-title');
-        const googleSigninBtn = document.getElementById('google-signin-btn');
-        const authForm = document.getElementById('auth-form');
-        const formSubmitBtn = document.getElementById('form-submit-btn');
-        const errorMessageDiv = document.getElementById('error-message');
-        
-        // --- ADDED: Get references to the payment links ---
-        const starterPlanLink = document.getElementById('starter-plan-link');
-        const proPlanLink = document.getElementById('pro-plan-link');
-        const baseStarterHref = starterPlanLink.href;
-        const baseProHref = proPlanLink.href;
-
-
-        let authMode = 'login';
-        
-        const updateModalUI = () => {
-            if (authMode === 'login') {
-                modalTitle.textContent = 'ログイン';
-                formSubmitBtn.textContent = 'ログイン';
-                loginTab.classList.add('border-pink-500', 'text-white');
-                loginTab.classList.remove('border-transparent', 'text-gray-400');
-                signupTab.classList.add('border-transparent', 'text-gray-400');
-                signupTab.classList.remove('border-pink-500', 'text-white');
-            } else {
-                modalTitle.textContent = '新規アカウント作成';
-                formSubmitBtn.textContent = 'アカウントを作成';
-                signupTab.classList.add('border-pink-500', 'text-white');
-                signupTab.classList.remove('border-transparent', 'text-gray-400');
-                loginTab.classList.add('border-transparent', 'text-gray-400');
-                loginTab.classList.remove('border-pink-500', 'text-white');
-            }
-        };
-
-        const openModal = (mode = 'login') => {
-            authMode = mode;
-            updateModalUI();
-            authForm.reset();
-            errorMessageDiv.classList.add('hidden');
-            authModal.classList.remove('hidden');
-            setTimeout(() => {
-                authModal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95');
-            }, 10);
-        };
-
-        const closeModal = () => {
-            authModal.classList.add('opacity-0');
-            modalContent.classList.add('scale-95');
-            setTimeout(() => {
-                authModal.classList.add('hidden');
-            }, 300);
-        };
-
-        loginTab.addEventListener('click', () => { authMode = 'login'; updateModalUI(); });
-        signupTab.addEventListener('click', () => { authMode = 'signup'; updateModalUI(); });
-        closeModalBtn.addEventListener('click', closeModal);
-        authModal.addEventListener('click', (e) => { if (e.target === authModal) closeModal(); });
-
-        const showAuthError = (message) => {
-            errorMessageDiv.textContent = message;
-            errorMessageDiv.classList.remove('hidden');
-        };
-
-        const getFriendlyErrorMessage = (error) => {
-            switch (error.code) {
-                case 'auth/invalid-email': return '有効なメールアドレスを入力してください。';
-                case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                case 'auth/invalid-credential': return 'メールアドレスまたはパスワードが正しくありません。';
-                case 'auth/email-already-in-use': return 'このメールアドレスは既に使用されています。';
-                case 'auth/weak-password': return 'パスワードは6文字以上で設定してください。';
-                default: return 'エラーが発生しました。しばらくしてからもう一度お試しください。';
-            }
-        };
-
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = authForm.email.value;
-            const password = authForm.password.value;
-            formSubmitBtn.disabled = true;
-            formSubmitBtn.textContent = '処理中...';
-            try {
-                if (authMode === 'login') {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                }
-                closeModal();
-            } catch (error) {
-                showAuthError(getFriendlyErrorMessage(error));
-            } finally {
-                formSubmitBtn.disabled = false;
-                updateModalUI();
-            }
+        subSnap.forEach((doc) => {
+          const sub = doc.data();
+          if (["active", "trialing"].includes(sub.status)) {
+            hasActivePlan = true;
+          }
         });
 
-        googleSigninBtn.addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-                closeModal();
-            } catch (error) {
-                console.error("Google sign in failed:", error);
-                showAuthError("Googleでのログイン/登録に失敗しました。");
-            }
+
+        if (!hasActivePlan) {
+          window.location.href = "/pricing.html";
+          return;
+        }
+
+        document.getElementById("userInfo").innerText = `ログイン中: ${user.email}`;
+        document.getElementById("mainApp").style.display = "block";
+      });
+
+      async function sendKeyword() {
+        const keyword = document.getElementById("keyword").value.trim();
+        if (!keyword) return alert("キーワードを入力してください");
+
+        const res = await fetch("https://hook.us1.make.com/xxxx", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ keyword })
         });
 
-        const checkActiveSubscription = async (user) => {
-            if (!user) return false;
-            const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
-            const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
-            const querySnapshot = await getDocs(q);
-            return !querySnapshot.empty;
-        };
+        if (!res.ok) return alert("エラーが発生しました");
+        alert("リサーチを開始しました。数分後にアカウントが表示されます。");
+      }
 
-        const handleLogout = () => signOut(auth).catch((e) => console.error('Sign out error', e));
+      async function scrapeVideos() {
+        const accounts = document.getElementById("accounts").value.trim();
+        const limit = parseInt(document.getElementById("limit").value);
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // --- ADDED: Update payment links for logged-in user ---
-                const params = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
-                starterPlanLink.href = baseStarterHref + params;
-                proPlanLink.href = baseProHref + params;
+        if (!accounts || isNaN(limit)) {
+          return alert("全ての項目を入力してください");
+        }
 
-                const isActive = await checkActiveSubscription(user);
-                if (isActive) {
-                    authButtonsContainer.innerHTML = `
-                        <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
-                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
-                    `;
-                    document.getElementById('logout-btn').addEventListener('click', handleLogout);
-                } else {
-                    authButtonsContainer.innerHTML = `
-                        <a href="#pricing" class="text-orange-400 hover:text-orange-300 font-medium transition-colors">プランを選択</a>
-                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
-                    `;
-                    document.getElementById('logout-btn').addEventListener('click', handleLogout);
-                }
-            } else {
-                // --- ADDED: Reset payment links for logged-out user ---
-                starterPlanLink.href = baseStarterHref;
-                proPlanLink.href = baseProHref;
-
-                authButtonsContainer.innerHTML = `
-                    <button id="signup-btn-header" class="text-white hover:text-pink-400 font-medium transition-colors">新規登録</button>
-                    <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
-                `;
-                document.getElementById('login-btn-header').addEventListener('click', () => openModal('login'));
-                document.getElementById('signup-btn-header').addEventListener('click', () => openModal('signup'));
-            }
+        const res = await fetch("https://hook.us1.make.com/yyyy", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ accounts, limit })
         });
 
+        if (!res.ok) return alert("スクレイプに失敗しました");
+
+        const data = await res.json();
+        displayResults(data);
+      }
+
+      function displayResults(data) {
+        const container = document.getElementById("result");
+        container.innerHTML = "";
+
+        data.videos.forEach(video => {
+          const card = document.createElement("div");
+          card.className = "video-card";
+
+          card.innerHTML = `
+            <p><strong>タイトル:</strong> ${video.title}</p>
+            <p><strong>再生数:</strong> ${video.views}</p>
+            <p><strong>投稿日:</strong> ${video.date}</p>
+            <a class="download-link" href="${video.downloadUrl}" download>⬇️ ダウンロード</a>
+          `;
+
+          container.appendChild(card);
+        });
+      }
     </script>
-</body>
+  </body>
 </html>
-
