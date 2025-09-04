@@ -218,7 +218,7 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
                         </ul>
                     </div>
-                    <!-- CORRECTED: Changed button to an anchor tag pointing to the Stripe Payment Link -->
+                    <!-- 修正点: Stripeで新しく作成した「支払いリンク」のURLに差し替えてください -->
                     <a href="https://buy.stripe.com/dRmdRb8cl5o48F54Ag4Rq04" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
                 </div>
 
@@ -241,7 +241,7 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                    <!-- CORRECTED: Changed button to an anchor tag pointing to the Stripe Payment Link -->
+                     <!-- 修正点: Stripeで新しく作成した「支払いリンク」のURLに差し替えてください -->
                     <a href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
 
@@ -412,8 +412,6 @@
 
         let authMode = 'login';
         
-        // CORRECTED: postLoginAction variable has been removed as it's no longer needed.
-
         const updateModalUI = () => {
             if (authMode === 'login') {
                 modalTitle.textContent = 'ログイン';
@@ -534,7 +532,6 @@
                     `;
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 }
-                 // CORRECTED: Removed the postLoginAction logic block.
             } else {
                 // User is signed out, show default login/signup buttons.
                 authButtonsContainer.innerHTML = `
@@ -546,9 +543,7 @@
             }
         });
 
-        // CORRECTED: The entire window.startCheckout function has been removed.
-        // The buttons now link directly to Stripe.
-
     </script>
 </body>
 </html>
+
