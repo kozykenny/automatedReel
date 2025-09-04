@@ -218,8 +218,8 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
                         </ul>
                     </div>
-                    <!-- 修正点: Stripeで新しく作成した「支払いリンク」のURLに差し替えてください -->
-                    <a href="https://buy.stripe.com/dRmdRb8cl5o48F54Ag4Rq04" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
+                    <!-- 修正点: 支払いリンクにIDを追加 -->
+                    <a id="starter-plan-link" href="https://buy.stripe.com/dRmdRb8cl5o48F54Ag4Rq04" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
                 </div>
 
                 <!-- Pro -->
@@ -241,8 +241,8 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                     <!-- 修正点: Stripeで新しく作成した「支払いリンク」のURLに差し替えてください -->
-                    <a href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
+                     <!-- 修正点: 支払いリンクにIDを追加 -->
+                    <a id="pro-plan-link" href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
 
                 <!-- Agency -->
@@ -378,7 +378,6 @@
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
-        // NOTE: Your Firebase config is still included for user login/logout and session management.
         const firebaseConfig = {
             apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
             authDomain: "viral-reel-automator.firebaseapp.com",
@@ -394,7 +393,6 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
         
-        // NOTE: Stripe.js is no longer needed for this checkout flow, but can be kept for future use (e.g., Portal).
         const stripe = Stripe('pk_live_51RoSthRtKpbVaYC51dOkn5S7li3zWB8TfJhAi44WarEcx2JPhZMXd6UzXNwN745AmZ7dc3OlVRZUnnZSqPkLIiit003ychhrka');
 
         // --- DOM Elements ---
@@ -409,6 +407,13 @@
         const authForm = document.getElementById('auth-form');
         const formSubmitBtn = document.getElementById('form-submit-btn');
         const errorMessageDiv = document.getElementById('error-message');
+        
+        // --- ADDED: Get references to the payment links ---
+        const starterPlanLink = document.getElementById('starter-plan-link');
+        const proPlanLink = document.getElementById('pro-plan-link');
+        const baseStarterHref = starterPlanLink.href;
+        const baseProHref = proPlanLink.href;
+
 
         let authMode = 'login';
         
@@ -515,17 +520,19 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in. Check for an active subscription.
+                // --- ADDED: Update payment links for logged-in user ---
+                const params = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
+                starterPlanLink.href = baseStarterHref + params;
+                proPlanLink.href = baseProHref + params;
+
                 const isActive = await checkActiveSubscription(user);
                 if (isActive) {
-                    // User is subscribed, show dashboard and logout buttons.
                     authButtonsContainer.innerHTML = `
                         <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
                         <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
                     `;
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 } else {
-                    // User is logged in but has no active subscription.
                     authButtonsContainer.innerHTML = `
                         <a href="#pricing" class="text-orange-400 hover:text-orange-300 font-medium transition-colors">プランを選択</a>
                         <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
@@ -533,7 +540,10 @@
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 }
             } else {
-                // User is signed out, show default login/signup buttons.
+                // --- ADDED: Reset payment links for logged-out user ---
+                starterPlanLink.href = baseStarterHref;
+                proPlanLink.href = baseProHref;
+
                 authButtonsContainer.innerHTML = `
                     <button id="signup-btn-header" class="text-white hover:text-pink-400 font-medium transition-colors">新規登録</button>
                     <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
