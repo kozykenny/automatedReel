@@ -55,7 +55,7 @@
                 <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
             </nav>
             <div id="auth-buttons" class="flex items-center space-x-4">
-                <!-- Auth buttons will be populated here by script -->
+                <span class="text-gray-400 text-sm">読み込み中...</span>
             </div>
         </div>
     </header>
@@ -519,6 +519,13 @@
         onAuthStateChanged(auth, async (user) => {
             modalSubtitle.textContent = ''; // Reset subtitle on auth change
             if (user) {
+                // Show a generic loading state for logged-in users immediately
+                authButtonsContainer.innerHTML = `
+                    <span class="text-sm text-gray-400 truncate">${user.email}</span>
+                    <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm">ログアウト</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', handleLogout);
+
                 const params = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
                 starterPlanLink.href = baseStarterHref + params;
                 proPlanLink.href = baseProHref + params;
@@ -553,7 +560,7 @@
                 proPlanLink.href = baseProHref;
 
                 authButtonsContainer.innerHTML = `
-                    <a href="#pricing" class="text-white hover:text-pink-400 font-medium transition-colors">試してみる</a>
+                    <a href="#pricing" class="font-bold transition-colors gradient-text hover:opacity-80">試してみる</a>
                     <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
                 `;
                 document.getElementById('login-btn-header').addEventListener('click', openModal);
@@ -579,3 +586,4 @@
     </script>
 </body>
 </html>
+
