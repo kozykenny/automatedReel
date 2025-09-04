@@ -218,7 +218,6 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
                         </ul>
                     </div>
-                    <!-- 修正点: 支払いリンクにIDを追加 -->
                     <a id="starter-plan-link" href="https://buy.stripe.com/dRmdRb8cl5o48F54Ag4Rq04" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
                 </div>
 
@@ -241,7 +240,6 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                     <!-- 修正点: 支払いリンクにIDを追加 -->
                     <a id="pro-plan-link" href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
 
@@ -345,7 +343,8 @@
                 <button id="login-tab" class="flex-1 py-2 text-center font-semibold border-b-2 border-pink-500 text-white">ログイン</button>
                 <button id="signup-tab" class="flex-1 py-2 text-center font-semibold border-transparent text-gray-400 hover:text-white">新規登録</button>
             </div>
-            <h2 id="modal-title" class="text-2xl font-bold text-white text-center mb-6">ログイン</h2>
+            <h2 id="modal-title" class="text-2xl font-bold text-white text-center mb-1">ログイン</h2>
+            <p id="modal-subtitle" class="text-center text-gray-400 text-sm mb-6"></p>
             <button id="google-signin-btn" class="w-full flex items-center justify-center py-3 px-4 border border-gray-600 rounded-md text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 mb-4">
                 <svg class="w-5 h-5 mr-2" viewBox="0 0 48 48"><defs><path id="a" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" fill="#FBBC05" d="M0 37V11l17 13z"/><path clip-path="url(#b)" fill="#EA4335" d="M0 11l17 13 7-6.1L48 14V0H0z"/><path clip-path="url(#b)" fill="#34A853" d="M0 37l30-23 7.9 1L48 0v48H0z"/><path clip-path="url(#b)" fill="#4285F4" d="M48 48L17 24l-4-3 35-10z"/></svg>
                 Googleで続行
@@ -403,12 +402,12 @@
         const loginTab = document.getElementById('login-tab');
         const signupTab = document.getElementById('signup-tab');
         const modalTitle = document.getElementById('modal-title');
+        const modalSubtitle = document.getElementById('modal-subtitle');
         const googleSigninBtn = document.getElementById('google-signin-btn');
         const authForm = document.getElementById('auth-form');
         const formSubmitBtn = document.getElementById('form-submit-btn');
         const errorMessageDiv = document.getElementById('error-message');
         
-        // --- ADDED: Get references to the payment links ---
         const starterPlanLink = document.getElementById('starter-plan-link');
         const proPlanLink = document.getElementById('pro-plan-link');
         const baseStarterHref = starterPlanLink.href;
@@ -519,6 +518,7 @@
         const handleLogout = () => signOut(auth).catch((e) => console.error('Sign out error', e));
 
         onAuthStateChanged(auth, async (user) => {
+            modalSubtitle.textContent = ''; // Reset subtitle on auth change
             if (user) {
                 // --- ADDED: Update payment links for logged-in user ---
                 const params = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
@@ -550,6 +550,19 @@
                 `;
                 document.getElementById('login-btn-header').addEventListener('click', () => openModal('login'));
                 document.getElementById('signup-btn-header').addEventListener('click', () => openModal('signup'));
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('payment') === 'success') {
+                setTimeout(() => {
+                    if (!auth.currentUser) {
+                        openModal('login');
+                        modalTitle.textContent = '登録ありがとうございます！';
+                        modalSubtitle.textContent = 'お支払い時に使用したメールアドレスでログインしてください。';
+                    }
+                }, 500);
             }
         });
 
