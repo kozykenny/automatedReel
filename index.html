@@ -240,7 +240,7 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                    <a id="pro-plan-link" href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
+                    <a id="pro-plan-link" href="https://buy.stripe.com/YOUR_NEW_PRO_LINK_HERE" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
 
                 <!-- Agency -->
@@ -375,7 +375,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
@@ -507,12 +507,31 @@
             }
         });
 
-        const checkActiveSubscription = async (user) => {
-            if (!user) return false;
+        const getActiveSubscriptionDetails = async (user) => {
+            if (!user) return null;
             const subscriptionsRef = collection(db, 'customers', user.uid, 'subscriptions');
             const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
             const querySnapshot = await getDocs(q);
-            return !querySnapshot.empty;
+
+            if (querySnapshot.empty) {
+                return null;
+            }
+
+            const subscriptionDoc = querySnapshot.docs[0].data();
+            const productRef = subscriptionDoc.product; 
+
+            if (productRef) {
+                try {
+                    const productSnap = await getDoc(productRef);
+                    if (productSnap.exists()) {
+                        return productSnap.data();
+                    }
+                } catch (error) {
+                    console.error("Error fetching product details:", error);
+                    return null;
+                }
+            }
+            return null;
         };
 
         const handleLogout = () => signOut(auth).catch((e) => console.error('Sign out error', e));
@@ -520,42 +539,50 @@
         onAuthStateChanged(auth, async (user) => {
             modalSubtitle.textContent = ''; // Reset subtitle on auth change
             if (user) {
-                // --- ADDED: Update payment links for logged-in user ---
                 const params = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
                 starterPlanLink.href = baseStarterHref + params;
                 proPlanLink.href = baseProHref + params;
 
-                const isActive = await checkActiveSubscription(user);
-                if (isActive) {
+                const subscriptionDetails = await getActiveSubscriptionDetails(user);
+
+                if (subscriptionDetails && subscriptionDetails.name) {
+                    // User is subscribed, show dashboard button and plan info
                     authButtonsContainer.innerHTML = `
-                        <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
-                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-gray-700 text-pink-400 text-xs font-bold px-3 py-1 rounded-full">${subscriptionDetails.name} Plan</span>
+                        </div>
+                        <a href="/dashboard.html" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ダッシュボードへ</a>
+                        <button id="logout-btn" class="text-gray-400 hover:text-white transition-colors">ログアウト</button>
                     `;
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 } else {
+                    // User is logged in but has no active subscription.
                     authButtonsContainer.innerHTML = `
+                         <span class="text-sm text-gray-400 truncate">${user.email}</span>
                         <a href="#pricing" class="text-orange-400 hover:text-orange-300 font-medium transition-colors">プランを選択</a>
-                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
+                        <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm">ログアウト</button>
                     `;
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 }
             } else {
-                // --- ADDED: Reset payment links for logged-out user ---
+                // User is signed out, show default login/signup buttons.
                 starterPlanLink.href = baseStarterHref;
                 proPlanLink.href = baseProHref;
 
                 authButtonsContainer.innerHTML = `
-                    <button id="signup-btn-header" class="text-white hover:text-pink-400 font-medium transition-colors">新規登録</button>
+                    <a href="#pricing" class="text-white hover:text-pink-400 font-medium transition-colors">試してみる</a>
                     <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
                 `;
                 document.getElementById('login-btn-header').addEventListener('click', () => openModal('login'));
-                document.getElementById('signup-btn-header').addEventListener('click', () => openModal('signup'));
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success') {
+                // Clear the query parameter from the URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
                 setTimeout(() => {
                     if (!auth.currentUser) {
                         openModal('login');
