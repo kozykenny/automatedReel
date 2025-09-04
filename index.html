@@ -62,7 +62,7 @@
 
     <!-- Hero Section -->
     <main class="container mx-auto px-6 py-24 text-center">
-        <h2 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">
+        <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white leading-tight">
             面倒なSNS運用を、<br class="hidden md:block" />
             <span class="gradient-text">AIに丸投げしませんか？</span>
         </h2>
@@ -240,7 +240,7 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                    <a id="pro-plan-link" href="https://buy.stripe.com/YOUR_NEW_PRO_LINK_HERE" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
+                    <a id="pro-plan-link" href="https://buy.stripe.com/dRm9AVbox03Kf3t4Ag4Rq05" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
 
                 <!-- Agency -->
@@ -339,10 +339,6 @@
     <div id="auth-modal" class="modal-backdrop fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50 opacity-0">
         <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-transform scale-95 relative">
             <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <div class="flex border-b border-gray-700 mb-6">
-                <button id="login-tab" class="flex-1 py-2 text-center font-semibold border-b-2 border-pink-500 text-white">ログイン</button>
-                <button id="signup-tab" class="flex-1 py-2 text-center font-semibold border-transparent text-gray-400 hover:text-white">新規登録</button>
-            </div>
             <h2 id="modal-title" class="text-2xl font-bold text-white text-center mb-1">ログイン</h2>
             <p id="modal-subtitle" class="text-center text-gray-400 text-sm mb-6"></p>
             <button id="google-signin-btn" class="w-full flex items-center justify-center py-3 px-4 border border-gray-600 rounded-md text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 mb-4">
@@ -399,8 +395,6 @@
         const closeModalBtn = document.getElementById('close-modal-btn');
         const modalContent = authModal.querySelector('div');
         const authButtonsContainer = document.getElementById('auth-buttons');
-        const loginTab = document.getElementById('login-tab');
-        const signupTab = document.getElementById('signup-tab');
         const modalTitle = document.getElementById('modal-title');
         const modalSubtitle = document.getElementById('modal-subtitle');
         const googleSigninBtn = document.getElementById('google-signin-btn');
@@ -412,31 +406,8 @@
         const proPlanLink = document.getElementById('pro-plan-link');
         const baseStarterHref = starterPlanLink.href;
         const baseProHref = proPlanLink.href;
-
-
-        let authMode = 'login';
         
-        const updateModalUI = () => {
-            if (authMode === 'login') {
-                modalTitle.textContent = 'ログイン';
-                formSubmitBtn.textContent = 'ログイン';
-                loginTab.classList.add('border-pink-500', 'text-white');
-                loginTab.classList.remove('border-transparent', 'text-gray-400');
-                signupTab.classList.add('border-transparent', 'text-gray-400');
-                signupTab.classList.remove('border-pink-500', 'text-white');
-            } else {
-                modalTitle.textContent = '新規アカウント作成';
-                formSubmitBtn.textContent = 'アカウントを作成';
-                signupTab.classList.add('border-pink-500', 'text-white');
-                signupTab.classList.remove('border-transparent', 'text-gray-400');
-                loginTab.classList.add('border-transparent', 'text-gray-400');
-                loginTab.classList.remove('border-pink-500', 'text-white');
-            }
-        };
-
-        const openModal = (mode = 'login') => {
-            authMode = mode;
-            updateModalUI();
+        const openModal = () => {
             authForm.reset();
             errorMessageDiv.classList.add('hidden');
             authModal.classList.remove('hidden');
@@ -454,8 +425,6 @@
             }, 300);
         };
 
-        loginTab.addEventListener('click', () => { authMode = 'login'; updateModalUI(); });
-        signupTab.addEventListener('click', () => { authMode = 'signup'; updateModalUI(); });
         closeModalBtn.addEventListener('click', closeModal);
         authModal.addEventListener('click', (e) => { if (e.target === authModal) closeModal(); });
 
@@ -483,17 +452,24 @@
             formSubmitBtn.disabled = true;
             formSubmitBtn.textContent = '処理中...';
             try {
-                if (authMode === 'login') {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                }
+                // Since accounts are auto-created on payment, we primarily try to sign in.
+                await signInWithEmailAndPassword(auth, email, password);
                 closeModal();
             } catch (error) {
-                showAuthError(getFriendlyErrorMessage(error));
+                if (error.code === 'auth/user-not-found') {
+                    // If user is not found, it means they might be signing up for the first time via modal
+                    try {
+                        await createUserWithEmailAndPassword(auth, email, password);
+                        closeModal();
+                    } catch (signupError) {
+                        showAuthError(getFriendlyErrorMessage(signupError));
+                    }
+                } else {
+                    showAuthError(getFriendlyErrorMessage(error));
+                }
             } finally {
                 formSubmitBtn.disabled = false;
-                updateModalUI();
+                formSubmitBtn.textContent = 'ログイン';
             }
         });
 
@@ -518,18 +494,22 @@
             }
 
             const subscriptionDoc = querySnapshot.docs[0].data();
-            const productRef = subscriptionDoc.product; 
+            // The `product` field might be a reference, so we need to fetch it.
+            const priceRef = subscriptionDoc.prices && subscriptionDoc.prices[0];
+            if (!priceRef) return null;
 
-            if (productRef) {
-                try {
+            try {
+                const priceSnap = await getDoc(priceRef);
+                if (priceSnap.exists()) {
+                    const productRef = priceSnap.data().product;
                     const productSnap = await getDoc(productRef);
                     if (productSnap.exists()) {
-                        return productSnap.data();
+                         return productSnap.data();
                     }
-                } catch (error) {
-                    console.error("Error fetching product details:", error);
-                    return null;
                 }
+            } catch (error) {
+                console.error("Error fetching product details:", error);
+                return null;
             }
             return null;
         };
@@ -573,7 +553,7 @@
                     <a href="#pricing" class="text-white hover:text-pink-400 font-medium transition-colors">試してみる</a>
                     <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
                 `;
-                document.getElementById('login-btn-header').addEventListener('click', () => openModal('login'));
+                document.getElementById('login-btn-header').addEventListener('click', openModal);
             }
         });
 
@@ -585,7 +565,7 @@
                 
                 setTimeout(() => {
                     if (!auth.currentUser) {
-                        openModal('login');
+                        openModal();
                         modalTitle.textContent = '登録ありがとうございます！';
                         modalSubtitle.textContent = 'お支払い時に使用したメールアドレスでログインしてください。';
                     }
