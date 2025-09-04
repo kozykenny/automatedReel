@@ -218,7 +218,8 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>スタンダードサポート</li>
                         </ul>
                     </div>
-                    <button onclick="startCheckout('price_1RxMShRtKpbVaYC5FAUL3BOO')" class="mt-8 w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</button>
+                    <!-- CORRECTED: Changed button to an anchor tag pointing to the Stripe Payment Link -->
+                    <a href="https://buy.stripe.com/eVq9AV64d4k06wX6Io4Rq02" class="mt-8 block w-full bg-orange-500 hover:bg-orange-600 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors">このプランで無料で試す</a>
                 </div>
 
                 <!-- Pro -->
@@ -240,7 +241,8 @@
                             <li class="flex items-center"><svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><strong>優先サポート</strong></li>
                         </ul>
                     </div>
-                    <button onclick="startCheckout('price_1RxMRBRtKpbVaYC5b1KI0oea')" class="mt-8 w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</button>
+                    <!-- CORRECTED: Changed button to an anchor tag pointing to the Stripe Payment Link -->
+                    <a href="https://buy.stripe.com/00wfZj9gp6s8bRh7Ms4Rq03" class="mt-8 block w-full bg-pink-600 hover:bg-pink-700 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors glow-shadow">このプランで無料で試す</a>
                 </div>
 
                 <!-- Agency -->
@@ -374,9 +376,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, onSnapshot, doc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
-
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // NOTE: Your Firebase config is still included for user login/logout and session management.
         const firebaseConfig = {
             apiKey: "AIzaSyBF3Ux_IZk6PU3thCwlZtDqBcXBkJWPj-8",
             authDomain: "viral-reel-automator.firebaseapp.com",
@@ -390,9 +392,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const functions = getFunctions(app, 'asia-northeast1');
         const googleProvider = new GoogleAuthProvider();
         
+        // NOTE: Stripe.js is no longer needed for this checkout flow, but can be kept for future use (e.g., Portal).
         const stripe = Stripe('pk_live_51RoSthRtKpbVaYC51dOkn5S7li3zWB8TfJhAi44WarEcx2JPhZMXd6UzXNwN745AmZ7dc3OlVRZUnnZSqPkLIiit003ychhrka');
 
         // --- DOM Elements ---
@@ -409,7 +411,8 @@
         const errorMessageDiv = document.getElementById('error-message');
 
         let authMode = 'login';
-        let postLoginAction = null;
+        
+        // CORRECTED: postLoginAction variable has been removed as it's no longer needed.
 
         const updateModalUI = () => {
             if (authMode === 'login') {
@@ -514,25 +517,26 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // User is signed in. Check for an active subscription.
                 const isActive = await checkActiveSubscription(user);
                 if (isActive) {
+                    // User is subscribed, show dashboard and logout buttons.
                     authButtonsContainer.innerHTML = `
                         <a href="/dashboard.html" class="text-white hover:text-pink-400 transition-colors">ダッシュボードへ</a>
                         <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
                     `;
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 } else {
+                    // User is logged in but has no active subscription.
                     authButtonsContainer.innerHTML = `
                         <a href="#pricing" class="text-orange-400 hover:text-orange-300 font-medium transition-colors">プランを選択</a>
                         <button id="logout-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">ログアウト</button>
                     `;
                     document.getElementById('logout-btn').addEventListener('click', handleLogout);
                 }
-                if (typeof postLoginAction === 'function') {
-                    postLoginAction();
-                    postLoginAction = null;
-                }
+                 // CORRECTED: Removed the postLoginAction logic block.
             } else {
+                // User is signed out, show default login/signup buttons.
                 authButtonsContainer.innerHTML = `
                     <button id="signup-btn-header" class="text-white hover:text-pink-400 font-medium transition-colors">新規登録</button>
                     <button id="login-btn-header" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ログイン</button>
@@ -542,30 +546,9 @@
             }
         });
 
-        window.startCheckout = async function(priceId) {
-            const user = auth.currentUser;
-            if (!user) {
-                postLoginAction = () => startCheckout(priceId);
-                openModal('signup');
-                return;
-            }
-            const checkoutSessionRef = collection(db, "customers", user.uid, "checkout_sessions");
-            const docRef = await addDoc(checkoutSessionRef, {
-                price: priceId,
-                success_url: window.location.origin + "/dashboard.html",
-                cancel_url: window.location.href,
-            });
-            onSnapshot(docRef, (snap) => {
-                const { error, sessionId } = snap.data();
-                if (error) {
-                    alert(`An error occurred: ${error.message}`);
-                }
-                if (sessionId) {
-                    stripe.redirectToCheckout({ sessionId });
-                }
-            });
-        };
+        // CORRECTED: The entire window.startCheckout function has been removed.
+        // The buttons now link directly to Stripe.
+
     </script>
 </body>
 </html>
-
